@@ -1,0 +1,11 @@
+mode: atomic
+github.com/ablease/zinn/api/client.go:13.44,17.2 1 1
+github.com/ablease/zinn/api/client.go:19.54,22.16 3 1
+github.com/ablease/zinn/api/client.go:26.2,28.16 3 1
+github.com/ablease/zinn/api/client.go:32.2,34.16 3 1
+github.com/ablease/zinn/api/client.go:38.2,40.16 3 1
+github.com/ablease/zinn/api/client.go:44.2,44.19 1 1
+github.com/ablease/zinn/api/client.go:22.16,24.3 1 0
+github.com/ablease/zinn/api/client.go:28.16,30.3 1 0
+github.com/ablease/zinn/api/client.go:34.16,36.3 1 0
+github.com/ablease/zinn/api/client.go:40.16,42.3 1 0

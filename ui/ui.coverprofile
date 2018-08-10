@@ -1,0 +1,11 @@
+mode: atomic
+github.com/ablease/zinn/ui/ui.go:25.18,32.2 1 2
+github.com/ablease/zinn/ui/ui.go:35.64,42.2 1 0
+github.com/ablease/zinn/ui/ui.go:45.40,50.16 4 2
+github.com/ablease/zinn/ui/ui.go:54.2,55.16 2 2
+github.com/ablease/zinn/ui/ui.go:50.16,51.13 1 0
+github.com/ablease/zinn/ui/ui.go:55.16,56.13 1 0
+github.com/ablease/zinn/ui/ui.go:61.43,66.16 4 0
+github.com/ablease/zinn/ui/ui.go:70.2,71.16 2 0
+github.com/ablease/zinn/ui/ui.go:66.16,67.13 1 0
+github.com/ablease/zinn/ui/ui.go:71.16,72.13 1 0

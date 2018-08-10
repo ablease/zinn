@@ -1,0 +1,28 @@
+package integration
+
+import (
+	"testing"
+
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
+	"github.com/onsi/gomega/gexec"
+)
+
+var pathToZinnCLI string
+var session *gexec.Session
+var err error
+
+var _ = BeforeSuite(func() {
+	var err error
+	pathToZinnCLI, err = gexec.Build("github.com/ablease/zinn/cmd/zinn")
+	Ω(err).ShouldNot(HaveOccurred())
+})
+
+var _ = AfterSuite(func() {
+	gexec.CleanupBuildArtifacts()
+})
+
+func TestIntegration(t *testing.T) {
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "Integration Suite")
+}

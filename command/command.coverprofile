@@ -1,0 +1,5 @@
+mode: atomic
+github.com/ablease/zinn/command/professions_command.go:19.49,23.2 3 0
+github.com/ablease/zinn/command/professions_command.go:25.59,27.16 2 1
+github.com/ablease/zinn/command/professions_command.go:31.2,33.12 3 1
+github.com/ablease/zinn/command/professions_command.go:27.16,29.3 1 0
