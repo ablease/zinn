@@ -9,41 +9,61 @@ import (
 	"github.com/onsi/gomega/ghttp"
 )
 
-var _ = Describe("A Zinn Client", func() {
+var _ = Describe("Client", func() {
 	var server *ghttp.Server
-	var client *ZinnClient
+	var client *Client
 
 	BeforeEach(func() {
 		server = ghttp.NewServer()
-		client = NewZinnClient(server.URL())
+		client = NewClient(server.URL())
 	})
 
 	AfterEach(func() {
 		server.Close()
 	})
+	// Error scenarios.. when NewRequest returns an error.. (url is malformed?)
+	// when client can't make the request (httpClient.Do)
+	// when json unmarshal fails
+	Describe("Professions", func() {
+		Context("when requesting all professions", func() {
+			var statusCode int
+			var profs []string
 
-	Describe("fetching professions", func() {
-		var statusCode int
-		var profs []string
-		BeforeEach(func() {
-			statusCode = http.StatusOK
-			profs = []string{}
-			server.AppendHandlers(ghttp.CombineHandlers(
-				ghttp.VerifyRequest("GET", "/v2/professions"),
-				ghttp.RespondWithJSONEncodedPtr(&statusCode, &profs),
-			))
+			BeforeEach(func() {
+				statusCode = http.StatusOK
+				profs = []string{}
+				server.AppendHandlers(ghttp.CombineHandlers(
+					ghttp.VerifyRequest("GET", "/v2/professions"),
+					ghttp.RespondWithJSONEncodedPtr(&statusCode, &profs),
+				))
+			})
+
+			It("should return the returned professions", func() {
+				profs = []string{"prof1", "prof2"}
+				professions, err := client.Professions()
+				Expect(err).NotTo(HaveOccurred())
+				Expect(professions).To(Equal(profs))
+			})
 		})
 
-		Context("when requesting all professions", func() {
-			Context("when the response is succesful", func() {
+		Context("when fetching professions fails", func() {
+			Context("due to a malformed response", func() {
+				var statusCode int
+				var profs string
 				BeforeEach(func() {
-					profs = []string{"prof1", "prof2"}
+					statusCode = http.StatusOK
+					profs = ""
+					server.AppendHandlers(ghttp.CombineHandlers(
+						ghttp.VerifyRequest("GET", "/v2/professions"),
+						ghttp.RespondWithJSONEncodedPtr(&statusCode, &profs),
+					))
 				})
 
-				It("should return the returned professions", func() {
+				It("throws a error", func() {
+					profs = "not valid json"
 					professions, err := client.Professions()
-					Expect(err).NotTo(HaveOccurred())
-					Expect(professions).Should(Equal(profs))
+					Expect(err).To(HaveOccurred())
+					Expect(professions).To(BeNil())
 				})
 			})
 		})

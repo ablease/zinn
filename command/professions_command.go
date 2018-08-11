@@ -18,7 +18,7 @@ type ProfessionsCommand struct {
 
 func (p *ProfessionsCommand) Setup(ui UI) error {
 	p.UI = ui
-	p.Client = api.NewZinnClient("https://api.guildwars2.com")
+	p.Client = api.NewClient("https://api.guildwars2.com")
 	return nil
 }
 

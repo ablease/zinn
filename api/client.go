@@ -6,17 +6,17 @@ import (
 	"net/http"
 )
 
-type ZinnClient struct {
+type Client struct {
 	URL string
 }
 
-func NewZinnClient(url string) *ZinnClient {
-	return &ZinnClient{
+func NewClient(url string) *Client {
+	return &Client{
 		URL: url,
 	}
 }
 
-func (c *ZinnClient) Professions() ([]string, error) {
+func (c *Client) Professions() ([]string, error) {
 	fullURL := c.URL + "/v2/professions"
 	req, err := http.NewRequest("GET", fullURL, nil)
 	if err != nil {
