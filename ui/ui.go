@@ -8,9 +8,6 @@ import (
 )
 
 type UI struct {
-	//In is the input buffer that reads from stdin
-	In io.Reader
-
 	// Out is the output buffer that prints to stdout
 	Out io.Writer
 
@@ -20,21 +17,20 @@ type UI struct {
 	terminalLock *sync.Mutex
 }
 
-// NewUI will return a UI object where Out is set to STDOUT, In is set to
-// STDIN, and Err is set to STDERR
+// NewUI will return a UI object where Out is set to STDOUT
+// and Err is set to STDERR
 func NewUI() *UI {
 	return &UI{
-		In:           os.Stdin,
+		// In:           os.Stdin,
 		Out:          os.Stdout,
 		Err:          os.Stderr,
 		terminalLock: &sync.Mutex{},
 	}
 }
 
-// NewTestUI will return a UI object where Out, In, and Err are customizable.
+// NewTestUI will return a UI object where Out and Err are customizable.
 func NewTestUI(in io.Reader, out io.Writer, err io.Writer) *UI {
 	return &UI{
-		In:           in,
 		Out:          out,
 		Err:          err,
 		terminalLock: &sync.Mutex{},
