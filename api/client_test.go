@@ -68,4 +68,27 @@ var _ = Describe("Client", func() {
 			})
 		})
 	})
+
+	Describe("Masteries", func() {
+		Context("when requesting all masteries", func() {
+			var statusCode int
+			var masts []int
+
+			BeforeEach(func() {
+				statusCode = http.StatusOK
+				masts = []int{}
+				server.AppendHandlers(ghttp.CombineHandlers(
+					ghttp.VerifyRequest("GET", "/v2/masteries"),
+					ghttp.RespondWithJSONEncodedPtr(&statusCode, &masts),
+				))
+			})
+
+			It("should return the returned professions", func() {
+				masts = []int{1, 2}
+				masteries, err := client.Masteries()
+				Expect(err).NotTo(HaveOccurred())
+				Expect(masteries).To(Equal(masts))
+			})
+		})
+	})
 })
