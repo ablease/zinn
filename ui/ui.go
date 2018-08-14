@@ -21,7 +21,6 @@ type UI struct {
 // and Err is set to STDERR
 func NewUI() *UI {
 	return &UI{
-		// In:           os.Stdin,
 		Out:          os.Stdout,
 		Err:          os.Stderr,
 		terminalLock: &sync.Mutex{},
@@ -42,15 +41,8 @@ func (ui *UI) DisplayText(data string) {
 	ui.terminalLock.Lock()
 	defer ui.terminalLock.Unlock()
 
-	_, err := io.WriteString(ui.Out, data)
-	if err != nil {
-		panic(err)
-	}
-
-	_, err = fmt.Fprintf(ui.Out, "\n")
-	if err != nil {
-		panic(err)
-	}
+	io.WriteString(ui.Out, data)
+	fmt.Fprintf(ui.Out, "\n")
 }
 
 // DisplayError outputs the given error to ui.Err.
