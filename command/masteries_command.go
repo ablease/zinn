@@ -1,7 +1,6 @@
 package command
 
 import (
-	"strconv"
 	"strings"
 
 	"github.com/ablease/zinn/api"
@@ -9,7 +8,7 @@ import (
 
 //go:generate counterfeiter . MasteriesClient
 type MasteriesClient interface {
-	Masteries() ([]int, error)
+	Masteries() ([]string, error)
 }
 
 type MasteriesCommand struct {
@@ -29,13 +28,7 @@ func (m *MasteriesCommand) Execute(args []string) error {
 		return err
 	}
 
-	ms := []string{}
-	for _, mastery := range masts {
-		i := strconv.Itoa(mastery)
-		ms = append(ms, i)
-	}
-
-	data := strings.Join(ms, " ")
+	data := strings.Join(masts, " ")
 	m.UI.DisplayText(data)
 	return nil
 }

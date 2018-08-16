@@ -2,6 +2,7 @@ package integration
 
 import (
 	"os/exec"
+	"time"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -9,15 +10,14 @@ import (
 	"github.com/onsi/gomega/gexec"
 )
 
-// masteries should return a list of masteries
-// masteries should accept an argument which is the mastery (name/id)
-// and returnt the requested mastery
+// masteries should return a list of mastery names
 
 var _ = Describe("masteries command", func() {
 	Context("when no arguments are given", func() {
 		BeforeEach(func() {
 			command := exec.Command(pathToZinnCLI, "masteries")
 			session, err = gexec.Start(command, GinkgoWriter, GinkgoWriter)
+			session.Wait(5 * time.Second)
 			Expect(err).ShouldNot(HaveOccurred())
 		})
 
@@ -25,9 +25,9 @@ var _ = Describe("masteries command", func() {
 			Eventually(session).Should(gexec.Exit(0))
 		})
 
-		It("should print a list of mastery ids", func() {
+		It("should print a list of mastery names", func() {
 			Eventually(session).Should(gexec.Exit(0))
-			Eventually(session).Should(gbytes.Say("1 2 3 4 5 6 8 12 13 14 15 16 17 18 19 20"))
+			Eventually(session).Should(gbytes.Say("Exalted Lore Itzel Lore Nuhoch Lore Pact Commander Fractal Attunement Legendary Crafting Gliding Raids Ancient Magics Raptor Mount Skimmer Mount Griffon Mount Springer Mount Jackal Mount Crystal Champion Roller Beetle Mount"))
 		})
 	})
 })

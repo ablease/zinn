@@ -62,7 +62,7 @@ var _ = Describe("Professions Command", func() {
 					fakeClient.ProfessionsReturns(nil, errors.New("oops"))
 				})
 
-				It("displays the list of professions", func() {
+				It("displays the error to the ui", func() {
 					err = cmd.Execute(nil)
 					Expect(err).To(HaveOccurred())
 					Expect(fakeClient.ProfessionsCallCount()).To(Equal(1))

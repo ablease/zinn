@@ -38,6 +38,15 @@ Err writer (see io package for more info). Initially the public functions are
 To run all the tests except integration, use the `bin/test` script. The 
 integration tests require an internet connection, as they run the cli in anger
 
+### TODOS
+- gw2api package: This package should know how to parse the responses from
+the gw2 api into usable go structs.
+It has a way to return a pointer to a gw2api struct, which has a http client
+and a way to provide authentication information to that client.
+This package also provides a function that receives a endpoint and an interface
+(or a data type to parse a response into), makes a http request to that endpoint
+and parses the response into the given interface.
+
 
 
 

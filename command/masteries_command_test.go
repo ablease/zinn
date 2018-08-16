@@ -40,33 +40,23 @@ var _ = Describe("Masteries Command", func() {
 		})
 	})
 
-	Describe("fetching professions", func() {
+	Describe("fetching masteries", func() {
 		Context("when the command is successful", func() {
 			BeforeEach(func() {
-				fakeClient.MasteriesReturns([]int{1, 2}, nil)
+				fakeClient.MasteriesReturns([]string{"a mastery", "another mastery"}, nil)
 			})
 
-			It("displays the list of professions", func() {
+			It("calls the client", func() {
+				_ = cmd.Execute(nil)
+				Expect(fakeClient.MasteriesCallCount()).To(Equal(1))
+			})
+
+			It("displays the list of masteries", func() {
 				err = cmd.Execute(nil)
 				Expect(err).ToNot(HaveOccurred())
 				Expect(fakeClient.MasteriesCallCount()).To(Equal(1))
-				Expect(testUI.Out).To(gbytes.Say("1 2"))
+				Expect(testUI.Out).To(gbytes.Say("a mastery another mastery"))
 			})
 		})
-
-		// Context("when the command is unsuccessful", func() {
-		// 	Context("due to a client error", func() {
-		// 		BeforeEach(func() {
-		// 			fakeClient.MasteriesReturns(nil, errors.New("oops"))
-		// 		})
-		//
-		// 		It("displays the list of professions", func() {
-		// 			err = cmd.Execute(nil)
-		// 			Expect(err).To(HaveOccurred())
-		// 			Expect(fakeClient.MasteriesCallCount()).To(Equal(1))
-		// 			Expect(err.Error()).To(Equal("oops"))
-		// 		})
-		// 	})
-		// })
 	})
 })

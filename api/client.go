@@ -4,10 +4,15 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 )
 
 type Client struct {
 	URL string
+}
+
+type Mastery struct {
+	Name string `json:"name"`
 }
 
 func NewClient(url string) *Client {
@@ -44,7 +49,7 @@ func (c *Client) Professions() ([]string, error) {
 	return profs, nil
 }
 
-func (c *Client) Masteries() ([]int, error) {
+func (c *Client) GetMasteryIDs() ([]int, error) {
 	fullURL := c.URL + "/v2/masteries"
 	req, err := http.NewRequest("GET", fullURL, nil)
 	if err != nil {
@@ -63,11 +68,50 @@ func (c *Client) Masteries() ([]int, error) {
 		return nil, err
 	}
 
-	var masts []int
-	err = json.Unmarshal(body, &masts)
+	var masteryIDs []int
+	err = json.Unmarshal(body, &masteryIDs)
+	if err != nil {
+		return nil, err
+	}
+	return masteryIDs, nil
+}
+
+func (c *Client) Masteries() ([]string, error) {
+	masteryIDs, err := c.GetMasteryIDs()
 	if err != nil {
 		return nil, err
 	}
 
-	return masts, nil
+	masteryNames := []string{}
+	for _, id := range masteryIDs {
+		s := strconv.Itoa(id)
+
+		fullURL := c.URL + "/v2/masteries/" + s
+		req, err := http.NewRequest("GET", fullURL, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		httpClient := http.Client{}
+		resp, err := httpClient.Do(req)
+		if err != nil {
+			return nil, err
+		}
+
+		defer resp.Body.Close()
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return nil, err
+		}
+
+		var mastery Mastery
+		err = json.Unmarshal(body, &mastery)
+		if err != nil {
+			return nil, err
+		}
+
+		masteryNames = append(masteryNames, mastery.Name)
+	}
+
+	return masteryNames, nil
 }

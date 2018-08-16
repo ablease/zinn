@@ -19,15 +19,15 @@ type FakeApiClient struct {
 		result1 []string
 		result2 error
 	}
-	MasteriesStub        func() ([]int, error)
+	MasteriesStub        func() ([]string, error)
 	masteriesMutex       sync.RWMutex
 	masteriesArgsForCall []struct{}
 	masteriesReturns     struct {
-		result1 []int
+		result1 []string
 		result2 error
 	}
 	masteriesReturnsOnCall map[int]struct {
-		result1 []int
+		result1 []string
 		result2 error
 	}
 	invocations      map[string][][]interface{}
@@ -77,7 +77,7 @@ func (fake *FakeApiClient) ProfessionsReturnsOnCall(i int, result1 []string, res
 	}{result1, result2}
 }
 
-func (fake *FakeApiClient) Masteries() ([]int, error) {
+func (fake *FakeApiClient) Masteries() ([]string, error) {
 	fake.masteriesMutex.Lock()
 	ret, specificReturn := fake.masteriesReturnsOnCall[len(fake.masteriesArgsForCall)]
 	fake.masteriesArgsForCall = append(fake.masteriesArgsForCall, struct{}{})
@@ -98,24 +98,24 @@ func (fake *FakeApiClient) MasteriesCallCount() int {
 	return len(fake.masteriesArgsForCall)
 }
 
-func (fake *FakeApiClient) MasteriesReturns(result1 []int, result2 error) {
+func (fake *FakeApiClient) MasteriesReturns(result1 []string, result2 error) {
 	fake.MasteriesStub = nil
 	fake.masteriesReturns = struct {
-		result1 []int
+		result1 []string
 		result2 error
 	}{result1, result2}
 }
 
-func (fake *FakeApiClient) MasteriesReturnsOnCall(i int, result1 []int, result2 error) {
+func (fake *FakeApiClient) MasteriesReturnsOnCall(i int, result1 []string, result2 error) {
 	fake.MasteriesStub = nil
 	if fake.masteriesReturnsOnCall == nil {
 		fake.masteriesReturnsOnCall = make(map[int]struct {
-			result1 []int
+			result1 []string
 			result2 error
 		})
 	}
 	fake.masteriesReturnsOnCall[i] = struct {
-		result1 []int
+		result1 []string
 		result2 error
 	}{result1, result2}
 }
