@@ -1,8 +1,10 @@
 mode: atomic
 github.com/ablease/zinn/command/masteries_command.go:19.47,23.2 3 2
 github.com/ablease/zinn/command/masteries_command.go:25.57,27.16 2 2
-github.com/ablease/zinn/command/masteries_command.go:31.2,33.12 3 2
+github.com/ablease/zinn/command/masteries_command.go:32.2,33.32 2 2
+github.com/ablease/zinn/command/masteries_command.go:37.2,39.12 3 2
 github.com/ablease/zinn/command/masteries_command.go:27.16,29.3 1 0
+github.com/ablease/zinn/command/masteries_command.go:33.32,35.3 1 4
 github.com/ablease/zinn/command/professions_command.go:19.49,23.2 3 2
 github.com/ablease/zinn/command/professions_command.go:25.59,27.16 2 2
 github.com/ablease/zinn/command/professions_command.go:31.2,33.12 3 1

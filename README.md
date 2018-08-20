@@ -46,7 +46,3 @@ and a way to provide authentication information to that client.
 This package also provides a function that receives a endpoint and an interface
 (or a data type to parse a response into), makes a http request to that endpoint
 and parses the response into the given interface.
-
-
-
-

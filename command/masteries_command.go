@@ -3,12 +3,12 @@ package command
 import (
 	"strings"
 
-	"github.com/ablease/zinn/api"
+	"github.com/ablease/zinn/gw2api"
 )
 
 //go:generate counterfeiter . MasteriesClient
 type MasteriesClient interface {
-	Masteries() ([]string, error)
+	Masteries() ([]gw2api.Mastery, error)
 }
 
 type MasteriesCommand struct {
@@ -18,7 +18,7 @@ type MasteriesCommand struct {
 
 func (m *MasteriesCommand) Setup(ui UI) error {
 	m.UI = ui
-	m.Client = api.NewClient("https://api.guildwars2.com")
+	m.Client = gw2api.NewAPI("https://api.guildwars2.com")
 	return nil
 }
 
@@ -28,7 +28,13 @@ func (m *MasteriesCommand) Execute(args []string) error {
 		return err
 	}
 
-	data := strings.Join(masts, " ")
+	// for each returned mastery create a list of their names
+	masteryNames := []string{}
+	for _, mastery := range masts {
+		masteryNames = append(masteryNames, mastery.Name)
+	}
+
+	data := strings.Join(masteryNames, " ")
 	m.UI.DisplayText(data)
 	return nil
 }

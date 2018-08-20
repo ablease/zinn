@@ -3,7 +3,7 @@ package command
 import (
 	"strings"
 
-	"github.com/ablease/zinn/api"
+	"github.com/ablease/zinn/gw2api"
 )
 
 //go:generate counterfeiter . ProfessionClient
@@ -18,7 +18,7 @@ type ProfessionsCommand struct {
 
 func (p *ProfessionsCommand) Setup(ui UI) error {
 	p.UI = ui
-	p.Client = api.NewClient("https://api.guildwars2.com")
+	p.Client = gw2api.NewAPI("")
 	return nil
 }
 

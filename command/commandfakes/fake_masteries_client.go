@@ -5,25 +5,26 @@ import (
 	"sync"
 
 	"github.com/ablease/zinn/command"
+	"github.com/ablease/zinn/gw2api"
 )
 
 type FakeMasteriesClient struct {
-	MasteriesStub        func() ([]string, error)
+	MasteriesStub        func() ([]gw2api.Mastery, error)
 	masteriesMutex       sync.RWMutex
 	masteriesArgsForCall []struct{}
 	masteriesReturns     struct {
-		result1 []string
+		result1 []gw2api.Mastery
 		result2 error
 	}
 	masteriesReturnsOnCall map[int]struct {
-		result1 []string
+		result1 []gw2api.Mastery
 		result2 error
 	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
 }
 
-func (fake *FakeMasteriesClient) Masteries() ([]string, error) {
+func (fake *FakeMasteriesClient) Masteries() ([]gw2api.Mastery, error) {
 	fake.masteriesMutex.Lock()
 	ret, specificReturn := fake.masteriesReturnsOnCall[len(fake.masteriesArgsForCall)]
 	fake.masteriesArgsForCall = append(fake.masteriesArgsForCall, struct{}{})
@@ -44,24 +45,24 @@ func (fake *FakeMasteriesClient) MasteriesCallCount() int {
 	return len(fake.masteriesArgsForCall)
 }
 
-func (fake *FakeMasteriesClient) MasteriesReturns(result1 []string, result2 error) {
+func (fake *FakeMasteriesClient) MasteriesReturns(result1 []gw2api.Mastery, result2 error) {
 	fake.MasteriesStub = nil
 	fake.masteriesReturns = struct {
-		result1 []string
+		result1 []gw2api.Mastery
 		result2 error
 	}{result1, result2}
 }
 
-func (fake *FakeMasteriesClient) MasteriesReturnsOnCall(i int, result1 []string, result2 error) {
+func (fake *FakeMasteriesClient) MasteriesReturnsOnCall(i int, result1 []gw2api.Mastery, result2 error) {
 	fake.MasteriesStub = nil
 	if fake.masteriesReturnsOnCall == nil {
 		fake.masteriesReturnsOnCall = make(map[int]struct {
-			result1 []string
+			result1 []gw2api.Mastery
 			result2 error
 		})
 	}
 	fake.masteriesReturnsOnCall[i] = struct {
-		result1 []string
+		result1 []gw2api.Mastery
 		result2 error
 	}{result1, result2}
 }

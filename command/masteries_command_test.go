@@ -3,6 +3,7 @@ package command_test
 import (
 	"github.com/ablease/zinn/command"
 	"github.com/ablease/zinn/command/commandfakes"
+	"github.com/ablease/zinn/gw2api"
 	"github.com/ablease/zinn/ui"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -43,7 +44,10 @@ var _ = Describe("Masteries Command", func() {
 	Describe("fetching masteries", func() {
 		Context("when the command is successful", func() {
 			BeforeEach(func() {
-				fakeClient.MasteriesReturns([]string{"a mastery", "another mastery"}, nil)
+				fakeClient.MasteriesReturns([]gw2api.Mastery{
+					gw2api.Mastery{Name: "a mastery"},
+					gw2api.Mastery{Name: "another mastery"},
+				}, nil)
 			})
 
 			It("calls the client", func() {

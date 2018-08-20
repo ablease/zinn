@@ -1,26 +1,28 @@
-package api_test
+package gw2api_test
 
 import (
 	"net/http"
 
-	. "github.com/ablease/zinn/api"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/ghttp"
+
+	. "github.com/ablease/zinn/gw2api"
 )
 
-var _ = Describe("Client", func() {
+var _ = Describe("Gw2api", func() {
 	var server *ghttp.Server
-	var client *Client
+	var gw2api *Gw2Api
 
 	BeforeEach(func() {
 		server = ghttp.NewServer()
-		client = NewClient(server.URL())
+		gw2api = NewAPI(server.URL())
 	})
 
 	AfterEach(func() {
 		server.Close()
 	})
+
 	Describe("Professions", func() {
 		Context("when requesting all professions", func() {
 			var statusCode int
@@ -37,7 +39,7 @@ var _ = Describe("Client", func() {
 
 			It("should return the returned professions", func() {
 				profs = []string{"prof1", "prof2"}
-				professions, err := client.Professions()
+				professions, err := gw2api.Professions()
 				Expect(err).NotTo(HaveOccurred())
 				Expect(professions).To(Equal(profs))
 			})
@@ -58,7 +60,7 @@ var _ = Describe("Client", func() {
 
 				It("throws a error", func() {
 					profs = "not valid json"
-					professions, err := client.Professions()
+					professions, err := gw2api.Professions()
 					Expect(err).To(HaveOccurred())
 					Expect(professions).To(BeNil())
 				})
@@ -69,15 +71,20 @@ var _ = Describe("Client", func() {
 	Describe("Masteries", func() {
 		Context("when requesting all masteries", func() {
 			var (
-				statusCode    int
-				masteryIDs    []int
-				firstMastery  Mastery
-				secondMastery Mastery
+				statusCode       int
+				masteryIDs       []int
+				expectedMasterys []Mastery
+				firstMastery     Mastery
+				secondMastery    Mastery
 			)
 
 			BeforeEach(func() {
 				statusCode = http.StatusOK
 				masteryIDs = []int{}
+				expectedMasterys = []Mastery{
+					Mastery{Name: "foo"},
+					Mastery{Name: "bar"},
+				}
 				server.AppendHandlers(
 					ghttp.CombineHandlers(
 						ghttp.VerifyRequest("GET", "/v2/masteries"),
@@ -99,9 +106,9 @@ var _ = Describe("Client", func() {
 				firstMastery = Mastery{Name: "foo"}
 				secondMastery = Mastery{Name: "bar"}
 
-				response, err := client.Masteries()
+				response, err := gw2api.Masteries()
 				Expect(err).NotTo(HaveOccurred())
-				Expect(response).To(Equal([]string{"foo", "bar"}))
+				Expect(response).To(Equal(expectedMasterys))
 			})
 		})
 
@@ -120,7 +127,7 @@ var _ = Describe("Client", func() {
 
 				It("throws a error", func() {
 					masts = "not valid json"
-					masteries, err := client.Masteries()
+					masteries, err := gw2api.Masteries()
 					Expect(err).To(HaveOccurred())
 					Expect(masteries).To(BeNil())
 				})
@@ -147,7 +154,7 @@ var _ = Describe("Client", func() {
 				It("throws a error", func() {
 					masteryIDs = []int{1}
 					masts = "not valid json"
-					masteries, err := client.Masteries()
+					masteries, err := gw2api.Masteries()
 					Expect(err).To(HaveOccurred())
 					Expect(masteries).To(BeNil())
 				})

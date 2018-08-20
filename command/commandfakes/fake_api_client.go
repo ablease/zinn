@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/ablease/zinn/command"
+	"github.com/ablease/zinn/gw2api"
 )
 
 type FakeApiClient struct {
@@ -19,15 +20,15 @@ type FakeApiClient struct {
 		result1 []string
 		result2 error
 	}
-	MasteriesStub        func() ([]string, error)
+	MasteriesStub        func() ([]gw2api.Mastery, error)
 	masteriesMutex       sync.RWMutex
 	masteriesArgsForCall []struct{}
 	masteriesReturns     struct {
-		result1 []string
+		result1 []gw2api.Mastery
 		result2 error
 	}
 	masteriesReturnsOnCall map[int]struct {
-		result1 []string
+		result1 []gw2api.Mastery
 		result2 error
 	}
 	invocations      map[string][][]interface{}
@@ -77,7 +78,7 @@ func (fake *FakeApiClient) ProfessionsReturnsOnCall(i int, result1 []string, res
 	}{result1, result2}
 }
 
-func (fake *FakeApiClient) Masteries() ([]string, error) {
+func (fake *FakeApiClient) Masteries() ([]gw2api.Mastery, error) {
 	fake.masteriesMutex.Lock()
 	ret, specificReturn := fake.masteriesReturnsOnCall[len(fake.masteriesArgsForCall)]
 	fake.masteriesArgsForCall = append(fake.masteriesArgsForCall, struct{}{})
@@ -98,24 +99,24 @@ func (fake *FakeApiClient) MasteriesCallCount() int {
 	return len(fake.masteriesArgsForCall)
 }
 
-func (fake *FakeApiClient) MasteriesReturns(result1 []string, result2 error) {
+func (fake *FakeApiClient) MasteriesReturns(result1 []gw2api.Mastery, result2 error) {
 	fake.MasteriesStub = nil
 	fake.masteriesReturns = struct {
-		result1 []string
+		result1 []gw2api.Mastery
 		result2 error
 	}{result1, result2}
 }
 
-func (fake *FakeApiClient) MasteriesReturnsOnCall(i int, result1 []string, result2 error) {
+func (fake *FakeApiClient) MasteriesReturnsOnCall(i int, result1 []gw2api.Mastery, result2 error) {
 	fake.MasteriesStub = nil
 	if fake.masteriesReturnsOnCall == nil {
 		fake.masteriesReturnsOnCall = make(map[int]struct {
-			result1 []string
+			result1 []gw2api.Mastery
 			result2 error
 		})
 	}
 	fake.masteriesReturnsOnCall[i] = struct {
-		result1 []string
+		result1 []gw2api.Mastery
 		result2 error
 	}{result1, result2}
 }
