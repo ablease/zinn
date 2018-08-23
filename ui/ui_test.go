@@ -37,4 +37,21 @@ var _ = Describe("UI", func() {
 			Expect(out).To(Say("uh oh\n"))
 		})
 	})
+
+	Describe("DisplayTable", func() {
+		Context("given a matrix of strings", func() {
+			var inputTable [][]string
+			var firstRow []string
+			var secondRow []string
+			firstRow = []string{"first", "1", "a"}
+			secondRow = []string{"second", "2", "b"}
+			inputTable = [][]string{firstRow, secondRow}
+
+			It("prints a table to ui.Out", func() {
+				ui.DisplayTable(inputTable)
+				Expect(out).To(Say("first 1 a"))
+				Expect(out).To(Say("second 2 b"))
+			})
+		})
+	})
 })

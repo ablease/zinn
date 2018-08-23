@@ -60,3 +60,21 @@ func (ui *UI) DisplayError(message error) {
 		panic(err)
 	}
 }
+
+func (ui *UI) DisplayTable(table [][]string) {
+	rows := len(table)
+	if rows == 0 {
+		return
+	}
+
+	columns := len(table[0])
+
+	for row := 0; row < rows; row++ {
+		for col := 0; col < columns; col++ {
+			data := table[row][col]
+			fmt.Fprintf(ui.Out, "%s%s", data, " ")
+		}
+		fmt.Fprintf(ui.Out, "\n")
+	}
+	return
+}
