@@ -6,7 +6,7 @@ import (
 	"github.com/ablease/zinn/command"
 	"github.com/ablease/zinn/command/commandfakes"
 	"github.com/ablease/zinn/ui"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gbytes"
 )
