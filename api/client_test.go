@@ -154,4 +154,54 @@ var _ = Describe("Client", func() {
 			})
 		})
 	})
+
+	Describe("Achievements", func() {
+		Context("when requesting all achievements", func() {
+			var (
+				statusCode int
+				achieveIDs []int
+			)
+
+			BeforeEach(func() {
+				statusCode = http.StatusOK
+				achieveIDs = []int{}
+				server.AppendHandlers(
+					ghttp.CombineHandlers(
+						ghttp.VerifyRequest("GET", "/v2/achievements"),
+						ghttp.RespondWithJSONEncodedPtr(&statusCode, &achieveIDs),
+					),
+				)
+			})
+
+			It("should return the list of achievements id's", func() {
+				achieveIDs = []int{1, 2}
+
+				response, err := client.AchievementIDs()
+				Expect(err).NotTo(HaveOccurred())
+				Expect(response).To(Equal([]int{1, 2}))
+			})
+		})
+
+		Context("when fetching achievementIDs fails", func() {
+			Context("due to a malformed response when fetching achievement ids", func() {
+				var statusCode int
+				var achieveIDs string
+				BeforeEach(func() {
+					statusCode = http.StatusOK
+					achieveIDs = ""
+					server.AppendHandlers(ghttp.CombineHandlers(
+						ghttp.VerifyRequest("GET", "/v2/achievements"),
+						ghttp.RespondWithJSONEncodedPtr(&statusCode, &achieveIDs),
+					))
+				})
+
+				It("throws a error", func() {
+					achieveIDs = "not valid json"
+					achievementIDs, err := client.AchievementIDs()
+					Expect(err).To(HaveOccurred())
+					Expect(achievementIDs).To(BeNil())
+				})
+			})
+		})
+	})
 })

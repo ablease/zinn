@@ -5,4 +5,5 @@ package command
 type ApiClient interface {
 	Professions() ([]string, error)
 	Masteries() ([]string, error)
+	AchievementIDs() ([]int, error)
 }

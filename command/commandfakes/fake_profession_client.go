@@ -10,8 +10,9 @@ import (
 type FakeProfessionClient struct {
 	ProfessionsStub        func() ([]string, error)
 	professionsMutex       sync.RWMutex
-	professionsArgsForCall []struct{}
-	professionsReturns     struct {
+	professionsArgsForCall []struct {
+	}
+	professionsReturns struct {
 		result1 []string
 		result2 error
 	}
@@ -26,16 +27,19 @@ type FakeProfessionClient struct {
 func (fake *FakeProfessionClient) Professions() ([]string, error) {
 	fake.professionsMutex.Lock()
 	ret, specificReturn := fake.professionsReturnsOnCall[len(fake.professionsArgsForCall)]
-	fake.professionsArgsForCall = append(fake.professionsArgsForCall, struct{}{})
+	fake.professionsArgsForCall = append(fake.professionsArgsForCall, struct {
+	}{})
+	stub := fake.ProfessionsStub
+	fakeReturns := fake.professionsReturns
 	fake.recordInvocation("Professions", []interface{}{})
 	fake.professionsMutex.Unlock()
-	if fake.ProfessionsStub != nil {
-		return fake.ProfessionsStub()
+	if stub != nil {
+		return stub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	return fake.professionsReturns.result1, fake.professionsReturns.result2
+	return fakeReturns.result1, fakeReturns.result2
 }
 
 func (fake *FakeProfessionClient) ProfessionsCallCount() int {
@@ -44,7 +48,15 @@ func (fake *FakeProfessionClient) ProfessionsCallCount() int {
 	return len(fake.professionsArgsForCall)
 }
 
+func (fake *FakeProfessionClient) ProfessionsCalls(stub func() ([]string, error)) {
+	fake.professionsMutex.Lock()
+	defer fake.professionsMutex.Unlock()
+	fake.ProfessionsStub = stub
+}
+
 func (fake *FakeProfessionClient) ProfessionsReturns(result1 []string, result2 error) {
+	fake.professionsMutex.Lock()
+	defer fake.professionsMutex.Unlock()
 	fake.ProfessionsStub = nil
 	fake.professionsReturns = struct {
 		result1 []string
@@ -53,6 +65,8 @@ func (fake *FakeProfessionClient) ProfessionsReturns(result1 []string, result2 e
 }
 
 func (fake *FakeProfessionClient) ProfessionsReturnsOnCall(i int, result1 []string, result2 error) {
+	fake.professionsMutex.Lock()
+	defer fake.professionsMutex.Unlock()
 	fake.ProfessionsStub = nil
 	if fake.professionsReturnsOnCall == nil {
 		fake.professionsReturnsOnCall = make(map[int]struct {

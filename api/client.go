@@ -115,3 +115,32 @@ func (c *Client) Masteries() ([]string, error) {
 
 	return masteryNames, nil
 }
+
+// AchievementIDs returns a list of all achievement ids
+func (c *Client) AchievementIDs() ([]int, error) {
+	achievementIDs := []int{}
+	fullURL := c.URL + "/v2/achievements"
+	req, err := http.NewRequest("GET", fullURL, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	httpClient := http.Client{}
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(body, &achievementIDs)
+	if err != nil {
+		return nil, err
+	}
+
+	return achievementIDs, nil
+}

@@ -8,6 +8,7 @@ type ExtendedCommander interface {
 }
 
 type Commands struct {
-	Professions ProfessionsCommand `command:"professions" description:"List Professions"`
-	Masteries   MasteriesCommand   `command:"masteries" description:"List Masteries"`
+	Professions  ProfessionsCommand  `command:"professions" description:"List Professions"`
+	Masteries    MasteriesCommand    `command:"masteries" description:"List Masteries"`
+	Achievements AchievementsCommand `command:"achievements" description:"List Achievements"`
 }

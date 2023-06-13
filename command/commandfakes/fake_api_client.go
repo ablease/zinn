@@ -8,21 +8,23 @@ import (
 )
 
 type FakeApiClient struct {
-	ProfessionsStub        func() ([]string, error)
-	professionsMutex       sync.RWMutex
-	professionsArgsForCall []struct{}
-	professionsReturns     struct {
-		result1 []string
+	AchievementIDsStub        func() ([]int, error)
+	achievementIDsMutex       sync.RWMutex
+	achievementIDsArgsForCall []struct {
+	}
+	achievementIDsReturns struct {
+		result1 []int
 		result2 error
 	}
-	professionsReturnsOnCall map[int]struct {
-		result1 []string
+	achievementIDsReturnsOnCall map[int]struct {
+		result1 []int
 		result2 error
 	}
 	MasteriesStub        func() ([]string, error)
 	masteriesMutex       sync.RWMutex
-	masteriesArgsForCall []struct{}
-	masteriesReturns     struct {
+	masteriesArgsForCall []struct {
+	}
+	masteriesReturns struct {
 		result1 []string
 		result2 error
 	}
@@ -30,49 +32,74 @@ type FakeApiClient struct {
 		result1 []string
 		result2 error
 	}
+	ProfessionsStub        func() ([]string, error)
+	professionsMutex       sync.RWMutex
+	professionsArgsForCall []struct {
+	}
+	professionsReturns struct {
+		result1 []string
+		result2 error
+	}
+	professionsReturnsOnCall map[int]struct {
+		result1 []string
+		result2 error
+	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
 }
 
-func (fake *FakeApiClient) Professions() ([]string, error) {
-	fake.professionsMutex.Lock()
-	ret, specificReturn := fake.professionsReturnsOnCall[len(fake.professionsArgsForCall)]
-	fake.professionsArgsForCall = append(fake.professionsArgsForCall, struct{}{})
-	fake.recordInvocation("Professions", []interface{}{})
-	fake.professionsMutex.Unlock()
-	if fake.ProfessionsStub != nil {
-		return fake.ProfessionsStub()
+func (fake *FakeApiClient) AchievementIDs() ([]int, error) {
+	fake.achievementIDsMutex.Lock()
+	ret, specificReturn := fake.achievementIDsReturnsOnCall[len(fake.achievementIDsArgsForCall)]
+	fake.achievementIDsArgsForCall = append(fake.achievementIDsArgsForCall, struct {
+	}{})
+	stub := fake.AchievementIDsStub
+	fakeReturns := fake.achievementIDsReturns
+	fake.recordInvocation("AchievementIDs", []interface{}{})
+	fake.achievementIDsMutex.Unlock()
+	if stub != nil {
+		return stub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	return fake.professionsReturns.result1, fake.professionsReturns.result2
+	return fakeReturns.result1, fakeReturns.result2
 }
 
-func (fake *FakeApiClient) ProfessionsCallCount() int {
-	fake.professionsMutex.RLock()
-	defer fake.professionsMutex.RUnlock()
-	return len(fake.professionsArgsForCall)
+func (fake *FakeApiClient) AchievementIDsCallCount() int {
+	fake.achievementIDsMutex.RLock()
+	defer fake.achievementIDsMutex.RUnlock()
+	return len(fake.achievementIDsArgsForCall)
 }
 
-func (fake *FakeApiClient) ProfessionsReturns(result1 []string, result2 error) {
-	fake.ProfessionsStub = nil
-	fake.professionsReturns = struct {
-		result1 []string
+func (fake *FakeApiClient) AchievementIDsCalls(stub func() ([]int, error)) {
+	fake.achievementIDsMutex.Lock()
+	defer fake.achievementIDsMutex.Unlock()
+	fake.AchievementIDsStub = stub
+}
+
+func (fake *FakeApiClient) AchievementIDsReturns(result1 []int, result2 error) {
+	fake.achievementIDsMutex.Lock()
+	defer fake.achievementIDsMutex.Unlock()
+	fake.AchievementIDsStub = nil
+	fake.achievementIDsReturns = struct {
+		result1 []int
 		result2 error
 	}{result1, result2}
 }
 
-func (fake *FakeApiClient) ProfessionsReturnsOnCall(i int, result1 []string, result2 error) {
-	fake.ProfessionsStub = nil
-	if fake.professionsReturnsOnCall == nil {
-		fake.professionsReturnsOnCall = make(map[int]struct {
-			result1 []string
+func (fake *FakeApiClient) AchievementIDsReturnsOnCall(i int, result1 []int, result2 error) {
+	fake.achievementIDsMutex.Lock()
+	defer fake.achievementIDsMutex.Unlock()
+	fake.AchievementIDsStub = nil
+	if fake.achievementIDsReturnsOnCall == nil {
+		fake.achievementIDsReturnsOnCall = make(map[int]struct {
+			result1 []int
 			result2 error
 		})
 	}
-	fake.professionsReturnsOnCall[i] = struct {
-		result1 []string
+	fake.achievementIDsReturnsOnCall[i] = struct {
+		result1 []int
 		result2 error
 	}{result1, result2}
 }
@@ -80,16 +107,19 @@ func (fake *FakeApiClient) ProfessionsReturnsOnCall(i int, result1 []string, res
 func (fake *FakeApiClient) Masteries() ([]string, error) {
 	fake.masteriesMutex.Lock()
 	ret, specificReturn := fake.masteriesReturnsOnCall[len(fake.masteriesArgsForCall)]
-	fake.masteriesArgsForCall = append(fake.masteriesArgsForCall, struct{}{})
+	fake.masteriesArgsForCall = append(fake.masteriesArgsForCall, struct {
+	}{})
+	stub := fake.MasteriesStub
+	fakeReturns := fake.masteriesReturns
 	fake.recordInvocation("Masteries", []interface{}{})
 	fake.masteriesMutex.Unlock()
-	if fake.MasteriesStub != nil {
-		return fake.MasteriesStub()
+	if stub != nil {
+		return stub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	return fake.masteriesReturns.result1, fake.masteriesReturns.result2
+	return fakeReturns.result1, fakeReturns.result2
 }
 
 func (fake *FakeApiClient) MasteriesCallCount() int {
@@ -98,7 +128,15 @@ func (fake *FakeApiClient) MasteriesCallCount() int {
 	return len(fake.masteriesArgsForCall)
 }
 
+func (fake *FakeApiClient) MasteriesCalls(stub func() ([]string, error)) {
+	fake.masteriesMutex.Lock()
+	defer fake.masteriesMutex.Unlock()
+	fake.MasteriesStub = stub
+}
+
 func (fake *FakeApiClient) MasteriesReturns(result1 []string, result2 error) {
+	fake.masteriesMutex.Lock()
+	defer fake.masteriesMutex.Unlock()
 	fake.MasteriesStub = nil
 	fake.masteriesReturns = struct {
 		result1 []string
@@ -107,6 +145,8 @@ func (fake *FakeApiClient) MasteriesReturns(result1 []string, result2 error) {
 }
 
 func (fake *FakeApiClient) MasteriesReturnsOnCall(i int, result1 []string, result2 error) {
+	fake.masteriesMutex.Lock()
+	defer fake.masteriesMutex.Unlock()
 	fake.MasteriesStub = nil
 	if fake.masteriesReturnsOnCall == nil {
 		fake.masteriesReturnsOnCall = make(map[int]struct {
@@ -120,13 +160,71 @@ func (fake *FakeApiClient) MasteriesReturnsOnCall(i int, result1 []string, resul
 	}{result1, result2}
 }
 
+func (fake *FakeApiClient) Professions() ([]string, error) {
+	fake.professionsMutex.Lock()
+	ret, specificReturn := fake.professionsReturnsOnCall[len(fake.professionsArgsForCall)]
+	fake.professionsArgsForCall = append(fake.professionsArgsForCall, struct {
+	}{})
+	stub := fake.ProfessionsStub
+	fakeReturns := fake.professionsReturns
+	fake.recordInvocation("Professions", []interface{}{})
+	fake.professionsMutex.Unlock()
+	if stub != nil {
+		return stub()
+	}
+	if specificReturn {
+		return ret.result1, ret.result2
+	}
+	return fakeReturns.result1, fakeReturns.result2
+}
+
+func (fake *FakeApiClient) ProfessionsCallCount() int {
+	fake.professionsMutex.RLock()
+	defer fake.professionsMutex.RUnlock()
+	return len(fake.professionsArgsForCall)
+}
+
+func (fake *FakeApiClient) ProfessionsCalls(stub func() ([]string, error)) {
+	fake.professionsMutex.Lock()
+	defer fake.professionsMutex.Unlock()
+	fake.ProfessionsStub = stub
+}
+
+func (fake *FakeApiClient) ProfessionsReturns(result1 []string, result2 error) {
+	fake.professionsMutex.Lock()
+	defer fake.professionsMutex.Unlock()
+	fake.ProfessionsStub = nil
+	fake.professionsReturns = struct {
+		result1 []string
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeApiClient) ProfessionsReturnsOnCall(i int, result1 []string, result2 error) {
+	fake.professionsMutex.Lock()
+	defer fake.professionsMutex.Unlock()
+	fake.ProfessionsStub = nil
+	if fake.professionsReturnsOnCall == nil {
+		fake.professionsReturnsOnCall = make(map[int]struct {
+			result1 []string
+			result2 error
+		})
+	}
+	fake.professionsReturnsOnCall[i] = struct {
+		result1 []string
+		result2 error
+	}{result1, result2}
+}
+
 func (fake *FakeApiClient) Invocations() map[string][][]interface{} {
 	fake.invocationsMutex.RLock()
 	defer fake.invocationsMutex.RUnlock()
-	fake.professionsMutex.RLock()
-	defer fake.professionsMutex.RUnlock()
+	fake.achievementIDsMutex.RLock()
+	defer fake.achievementIDsMutex.RUnlock()
 	fake.masteriesMutex.RLock()
 	defer fake.masteriesMutex.RUnlock()
+	fake.professionsMutex.RLock()
+	defer fake.professionsMutex.RUnlock()
 	copiedInvocations := map[string][][]interface{}{}
 	for key, value := range fake.invocations {
 		copiedInvocations[key] = value

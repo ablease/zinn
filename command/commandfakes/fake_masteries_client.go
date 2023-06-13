@@ -10,8 +10,9 @@ import (
 type FakeMasteriesClient struct {
 	MasteriesStub        func() ([]string, error)
 	masteriesMutex       sync.RWMutex
-	masteriesArgsForCall []struct{}
-	masteriesReturns     struct {
+	masteriesArgsForCall []struct {
+	}
+	masteriesReturns struct {
 		result1 []string
 		result2 error
 	}
@@ -26,16 +27,19 @@ type FakeMasteriesClient struct {
 func (fake *FakeMasteriesClient) Masteries() ([]string, error) {
 	fake.masteriesMutex.Lock()
 	ret, specificReturn := fake.masteriesReturnsOnCall[len(fake.masteriesArgsForCall)]
-	fake.masteriesArgsForCall = append(fake.masteriesArgsForCall, struct{}{})
+	fake.masteriesArgsForCall = append(fake.masteriesArgsForCall, struct {
+	}{})
+	stub := fake.MasteriesStub
+	fakeReturns := fake.masteriesReturns
 	fake.recordInvocation("Masteries", []interface{}{})
 	fake.masteriesMutex.Unlock()
-	if fake.MasteriesStub != nil {
-		return fake.MasteriesStub()
+	if stub != nil {
+		return stub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	return fake.masteriesReturns.result1, fake.masteriesReturns.result2
+	return fakeReturns.result1, fakeReturns.result2
 }
 
 func (fake *FakeMasteriesClient) MasteriesCallCount() int {
@@ -44,7 +48,15 @@ func (fake *FakeMasteriesClient) MasteriesCallCount() int {
 	return len(fake.masteriesArgsForCall)
 }
 
+func (fake *FakeMasteriesClient) MasteriesCalls(stub func() ([]string, error)) {
+	fake.masteriesMutex.Lock()
+	defer fake.masteriesMutex.Unlock()
+	fake.MasteriesStub = stub
+}
+
 func (fake *FakeMasteriesClient) MasteriesReturns(result1 []string, result2 error) {
+	fake.masteriesMutex.Lock()
+	defer fake.masteriesMutex.Unlock()
 	fake.MasteriesStub = nil
 	fake.masteriesReturns = struct {
 		result1 []string
@@ -53,6 +65,8 @@ func (fake *FakeMasteriesClient) MasteriesReturns(result1 []string, result2 erro
 }
 
 func (fake *FakeMasteriesClient) MasteriesReturnsOnCall(i int, result1 []string, result2 error) {
+	fake.masteriesMutex.Lock()
+	defer fake.masteriesMutex.Unlock()
 	fake.MasteriesStub = nil
 	if fake.masteriesReturnsOnCall == nil {
 		fake.masteriesReturnsOnCall = make(map[int]struct {
