@@ -15,6 +15,11 @@ func main() {
 	parser := flags.NewParser(&commands, flags.HelpFlag)
 	parser.CommandHandler = handleCommand
 	_, err := parser.ParseArgs(os.Args[1:])
+
+	if len(os.Args[1:]) < 1 {
+		parser.WriteHelp(os.Stdout)
+	}
+
 	if err != nil {
 		fmt.Print(err)
 		os.Exit(0)
