@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 	"sync"
+
+	runewidth "github.com/mattn/go-runewidth"
 )
 
 type UI struct {
@@ -59,4 +62,49 @@ func (ui *UI) DisplayError(message error) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+// DisplayJSON
+
+// DisplayNonWrappingTable draws a table from a 2d array of strings to ui.Out.
+// Prefix will be prepended to each row. Padding adds spaces between columns
+func (ui *UI) DisplayNonWrappingTable(prefix string, table [][]string, padding int) {
+	ui.terminalLock.Lock()
+	defer ui.terminalLock.Unlock()
+
+	if len(table) == 0 {
+		return
+	}
+
+	var columnPadding []int
+
+	rows := len(table)
+	columns := len(table[0])
+	for col := 0; col < columns; col++ {
+		var max int
+		for row := 0; row < rows; row++ {
+			if strLen := wordSize(table[row][col]); max < strLen {
+				max = strLen
+			}
+		}
+		columnPadding = append(columnPadding, max+padding)
+	}
+
+	for row := 0; row < rows; row++ {
+		fmt.Fprint(ui.Out, prefix)
+		for col := 0; col < columns; col++ {
+			data := table[row][col]
+			var addedPadding int
+			if col+1 != columns {
+				addedPadding = columnPadding[col] - wordSize(data)
+			}
+			fmt.Fprintf(ui.Out, "%s%s", data, strings.Repeat(" ", addedPadding))
+		}
+		fmt.Fprintf(ui.Out, "\n")
+	}
+}
+
+func wordSize(str string) int {
+	// TODO: clean up raw terminal output see github.com/lunixbochs/vtclean
+	return runewidth.StringWidth(str)
 }
