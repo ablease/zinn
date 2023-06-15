@@ -17,9 +17,10 @@ type AchievementsCommand struct {
 	Client AchievementsClient
 }
 
+// Setup sets the UI object, and the URL for the api Client
 func (a *AchievementsCommand) Setup(ui UI) error {
 	a.UI = ui
-	a.Client = api.NewClient("https://api.guildwars2.com")
+	a.Client = api.NewClient("https://api.guildwars2.com/v2/achievements")
 	return nil
 }
 

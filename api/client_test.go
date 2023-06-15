@@ -167,7 +167,7 @@ var _ = Describe("Client", func() {
 				achieveIDs = []int{}
 				server.AppendHandlers(
 					ghttp.CombineHandlers(
-						ghttp.VerifyRequest("GET", "/v2/achievements"),
+						ghttp.VerifyRequest("GET", "/"),
 						ghttp.RespondWithJSONEncodedPtr(&statusCode, &achieveIDs),
 					),
 				)
@@ -190,7 +190,7 @@ var _ = Describe("Client", func() {
 					statusCode = http.StatusOK
 					achieveIDs = ""
 					server.AppendHandlers(ghttp.CombineHandlers(
-						ghttp.VerifyRequest("GET", "/v2/achievements"),
+						ghttp.VerifyRequest("GET", "/"),
 						ghttp.RespondWithJSONEncodedPtr(&statusCode, &achieveIDs),
 					))
 				})

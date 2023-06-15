@@ -105,8 +105,7 @@ func (c *Client) Masteries() ([]string, error) {
 // AchievementIDs returns a list of all achievement ids
 func (c *Client) AchievementIDs() ([]int, error) {
 	achievementIDs := []int{}
-	fullURL := c.URL + "/v2/achievements"
-	body, err := get(fullURL)
+	body, err := get(c.URL)
 	if err != nil {
 		return nil, err
 	}
