@@ -50,14 +50,11 @@ func (c *Client) Masteries(ids []int) ([]Mastery, error) {
 		fullURL = fullURL + strconv.Itoa(id) + ","
 	}
 
-	// make get request to constructed url
-
 	body, err := get(fullURL)
 	if err != nil {
 		return nil, err
 	}
 
-	// unmarshal response body into mastery types
 	var masteries []Mastery
 	err = json.Unmarshal(body, &masteries)
 	if err != nil {

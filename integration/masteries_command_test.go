@@ -25,9 +25,12 @@ var _ = Describe("masteries command", func() {
 			Eventually(session).Should(gexec.Exit(0))
 		})
 
-		It("should print a list of mastery names", func() {
+		It("should show the result in table format", func() {
+			By("Printing a table header")
 			Eventually(session).Should(gexec.Exit(0))
 			Eventually(session).Should(gbytes.Say("MasteriesID  Name"))
+
+			By("populating the table with data")
 			Eventually(session).Should(gbytes.Say("Masteries1   Exalted Lore"))
 		})
 	})
