@@ -68,40 +68,31 @@ var _ = Describe("Client", func() {
 
 	Describe("Masteries", func() {
 		Context("when requesting all masteries", func() {
-			var (
-				statusCode    int
-				masteryIDs    []int
-				firstMastery  Mastery
-				secondMastery Mastery
-			)
+			var statusCode int
+			var returnedMasteries []Mastery
 
 			BeforeEach(func() {
 				statusCode = http.StatusOK
-				masteryIDs = []int{}
-				server.AppendHandlers(
-					ghttp.CombineHandlers(
-						ghttp.VerifyRequest("GET", "/v2/masteries"),
-						ghttp.RespondWithJSONEncodedPtr(&statusCode, &masteryIDs),
-					),
-					ghttp.CombineHandlers(
-						ghttp.VerifyRequest("GET", "/v2/masteries/1"),
-						ghttp.RespondWithJSONEncodedPtr(&statusCode, &firstMastery),
-					),
-					ghttp.CombineHandlers(
-						ghttp.VerifyRequest("GET", "/v2/masteries/2"),
-						ghttp.RespondWithJSONEncodedPtr(&statusCode, &secondMastery),
-					),
-				)
+				returnedMasteries = []Mastery{{
+					ID:   1,
+					Name: "Mastery1",
+				},
+					{
+						ID:          2,
+						Name:        "Mastery2",
+						Requirement: "requirement",
+					},
+				}
+				server.AppendHandlers(ghttp.CombineHandlers(
+					ghttp.VerifyRequest("GET", "/v2/masteries", "ids=1,2"),
+					ghttp.RespondWithJSONEncodedPtr(&statusCode, &returnedMasteries),
+				))
 			})
 
-			It("should return the list of masteries", func() {
-				masteryIDs = []int{1, 2}
-				firstMastery = Mastery{Name: "foo"}
-				secondMastery = Mastery{Name: "bar"}
-
-				response, err := client.Masteries()
+			It("should return the returned masterys", func() {
+				masteries, err := client.Masteries([]int{1, 2})
 				Expect(err).NotTo(HaveOccurred())
-				Expect(response).To(Equal([]string{"foo", "bar"}))
+				Expect(masteries).To(Equal(returnedMasteries))
 			})
 		})
 
@@ -120,34 +111,7 @@ var _ = Describe("Client", func() {
 
 				It("throws a error", func() {
 					masts = "not valid json"
-					masteries, err := client.Masteries()
-					Expect(err).To(HaveOccurred())
-					Expect(masteries).To(BeNil())
-				})
-			})
-
-			Context("due to a malformed response when fetching a mastery", func() {
-				var statusCode int
-				var masts string
-				var masteryIDs []int
-				BeforeEach(func() {
-					statusCode = http.StatusOK
-					masts = ""
-					masteryIDs = []int{}
-					server.AppendHandlers(ghttp.CombineHandlers(
-						ghttp.VerifyRequest("GET", "/v2/masteries"),
-						ghttp.RespondWithJSONEncodedPtr(&statusCode, &masteryIDs),
-					),
-						ghttp.CombineHandlers(
-							ghttp.VerifyRequest("GET", "/v2/masteries/1"),
-							ghttp.RespondWithJSONEncodedPtr(&statusCode, &masts),
-						))
-				})
-
-				It("throws a error", func() {
-					masteryIDs = []int{1}
-					masts = "not valid json"
-					masteries, err := client.Masteries()
+					masteries, err := client.Masteries([]int{1, 2})
 					Expect(err).To(HaveOccurred())
 					Expect(masteries).To(BeNil())
 				})

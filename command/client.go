@@ -1,9 +1,13 @@
 package command
 
+import "github.com/ablease/zinn/api"
+
 // Client ...
+//
 //go:generate counterfeiter . ApiClient
 type ApiClient interface {
 	Professions() ([]string, error)
-	Masteries() ([]string, error)
+	GetMasteryIDs() ([]int, error)
+	Masteries(ids []int) ([]api.Mastery, error)
 	AchievementIDs() ([]int, error)
 }

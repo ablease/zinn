@@ -7,6 +7,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/lunixbochs/vtclean"
 	runewidth "github.com/mattn/go-runewidth"
 )
 
@@ -105,6 +106,6 @@ func (ui *UI) DisplayNonWrappingTable(prefix string, table [][]string, padding i
 }
 
 func wordSize(str string) int {
-	// TODO: clean up raw terminal output see github.com/lunixbochs/vtclean
-	return runewidth.StringWidth(str)
+	cleanStr := vtclean.Clean(str, false)
+	return runewidth.StringWidth(cleanStr)
 }

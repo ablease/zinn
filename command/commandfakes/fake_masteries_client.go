@@ -4,37 +4,113 @@ package commandfakes
 import (
 	"sync"
 
+	"github.com/ablease/zinn/api"
 	"github.com/ablease/zinn/command"
 )
 
 type FakeMasteriesClient struct {
-	MasteriesStub        func() ([]string, error)
+	GetMasteryIDsStub        func() ([]int, error)
+	getMasteryIDsMutex       sync.RWMutex
+	getMasteryIDsArgsForCall []struct {
+	}
+	getMasteryIDsReturns struct {
+		result1 []int
+		result2 error
+	}
+	getMasteryIDsReturnsOnCall map[int]struct {
+		result1 []int
+		result2 error
+	}
+	MasteriesStub        func([]int) ([]api.Mastery, error)
 	masteriesMutex       sync.RWMutex
 	masteriesArgsForCall []struct {
+		arg1 []int
 	}
 	masteriesReturns struct {
-		result1 []string
+		result1 []api.Mastery
 		result2 error
 	}
 	masteriesReturnsOnCall map[int]struct {
-		result1 []string
+		result1 []api.Mastery
 		result2 error
 	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
 }
 
-func (fake *FakeMasteriesClient) Masteries() ([]string, error) {
+func (fake *FakeMasteriesClient) GetMasteryIDs() ([]int, error) {
+	fake.getMasteryIDsMutex.Lock()
+	ret, specificReturn := fake.getMasteryIDsReturnsOnCall[len(fake.getMasteryIDsArgsForCall)]
+	fake.getMasteryIDsArgsForCall = append(fake.getMasteryIDsArgsForCall, struct {
+	}{})
+	stub := fake.GetMasteryIDsStub
+	fakeReturns := fake.getMasteryIDsReturns
+	fake.recordInvocation("GetMasteryIDs", []interface{}{})
+	fake.getMasteryIDsMutex.Unlock()
+	if stub != nil {
+		return stub()
+	}
+	if specificReturn {
+		return ret.result1, ret.result2
+	}
+	return fakeReturns.result1, fakeReturns.result2
+}
+
+func (fake *FakeMasteriesClient) GetMasteryIDsCallCount() int {
+	fake.getMasteryIDsMutex.RLock()
+	defer fake.getMasteryIDsMutex.RUnlock()
+	return len(fake.getMasteryIDsArgsForCall)
+}
+
+func (fake *FakeMasteriesClient) GetMasteryIDsCalls(stub func() ([]int, error)) {
+	fake.getMasteryIDsMutex.Lock()
+	defer fake.getMasteryIDsMutex.Unlock()
+	fake.GetMasteryIDsStub = stub
+}
+
+func (fake *FakeMasteriesClient) GetMasteryIDsReturns(result1 []int, result2 error) {
+	fake.getMasteryIDsMutex.Lock()
+	defer fake.getMasteryIDsMutex.Unlock()
+	fake.GetMasteryIDsStub = nil
+	fake.getMasteryIDsReturns = struct {
+		result1 []int
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeMasteriesClient) GetMasteryIDsReturnsOnCall(i int, result1 []int, result2 error) {
+	fake.getMasteryIDsMutex.Lock()
+	defer fake.getMasteryIDsMutex.Unlock()
+	fake.GetMasteryIDsStub = nil
+	if fake.getMasteryIDsReturnsOnCall == nil {
+		fake.getMasteryIDsReturnsOnCall = make(map[int]struct {
+			result1 []int
+			result2 error
+		})
+	}
+	fake.getMasteryIDsReturnsOnCall[i] = struct {
+		result1 []int
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeMasteriesClient) Masteries(arg1 []int) ([]api.Mastery, error) {
+	var arg1Copy []int
+	if arg1 != nil {
+		arg1Copy = make([]int, len(arg1))
+		copy(arg1Copy, arg1)
+	}
 	fake.masteriesMutex.Lock()
 	ret, specificReturn := fake.masteriesReturnsOnCall[len(fake.masteriesArgsForCall)]
 	fake.masteriesArgsForCall = append(fake.masteriesArgsForCall, struct {
-	}{})
+		arg1 []int
+	}{arg1Copy})
 	stub := fake.MasteriesStub
 	fakeReturns := fake.masteriesReturns
-	fake.recordInvocation("Masteries", []interface{}{})
+	fake.recordInvocation("Masteries", []interface{}{arg1Copy})
 	fake.masteriesMutex.Unlock()
 	if stub != nil {
-		return stub()
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
@@ -48,34 +124,41 @@ func (fake *FakeMasteriesClient) MasteriesCallCount() int {
 	return len(fake.masteriesArgsForCall)
 }
 
-func (fake *FakeMasteriesClient) MasteriesCalls(stub func() ([]string, error)) {
+func (fake *FakeMasteriesClient) MasteriesCalls(stub func([]int) ([]api.Mastery, error)) {
 	fake.masteriesMutex.Lock()
 	defer fake.masteriesMutex.Unlock()
 	fake.MasteriesStub = stub
 }
 
-func (fake *FakeMasteriesClient) MasteriesReturns(result1 []string, result2 error) {
+func (fake *FakeMasteriesClient) MasteriesArgsForCall(i int) []int {
+	fake.masteriesMutex.RLock()
+	defer fake.masteriesMutex.RUnlock()
+	argsForCall := fake.masteriesArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeMasteriesClient) MasteriesReturns(result1 []api.Mastery, result2 error) {
 	fake.masteriesMutex.Lock()
 	defer fake.masteriesMutex.Unlock()
 	fake.MasteriesStub = nil
 	fake.masteriesReturns = struct {
-		result1 []string
+		result1 []api.Mastery
 		result2 error
 	}{result1, result2}
 }
 
-func (fake *FakeMasteriesClient) MasteriesReturnsOnCall(i int, result1 []string, result2 error) {
+func (fake *FakeMasteriesClient) MasteriesReturnsOnCall(i int, result1 []api.Mastery, result2 error) {
 	fake.masteriesMutex.Lock()
 	defer fake.masteriesMutex.Unlock()
 	fake.MasteriesStub = nil
 	if fake.masteriesReturnsOnCall == nil {
 		fake.masteriesReturnsOnCall = make(map[int]struct {
-			result1 []string
+			result1 []api.Mastery
 			result2 error
 		})
 	}
 	fake.masteriesReturnsOnCall[i] = struct {
-		result1 []string
+		result1 []api.Mastery
 		result2 error
 	}{result1, result2}
 }
@@ -83,6 +166,8 @@ func (fake *FakeMasteriesClient) MasteriesReturnsOnCall(i int, result1 []string,
 func (fake *FakeMasteriesClient) Invocations() map[string][][]interface{} {
 	fake.invocationsMutex.RLock()
 	defer fake.invocationsMutex.RUnlock()
+	fake.getMasteryIDsMutex.RLock()
+	defer fake.getMasteryIDsMutex.RUnlock()
 	fake.masteriesMutex.RLock()
 	defer fake.masteriesMutex.RUnlock()
 	copiedInvocations := map[string][][]interface{}{}

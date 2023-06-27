@@ -27,7 +27,8 @@ var _ = Describe("masteries command", func() {
 
 		It("should print a list of mastery names", func() {
 			Eventually(session).Should(gexec.Exit(0))
-			Eventually(session).Should(gbytes.Say("Exalted Lore Itzel Lore Nuhoch Lore Pact Commander Fractal Attunement Legendary Crafting Gliding Raids Ancient Magics Raptor Mount Skimmer Mount Griffon Mount Springer Mount Jackal Mount Crystal Champion Roller Beetle Mount"))
+			Eventually(session).Should(gbytes.Say("MasteriesID  Name"))
+			Eventually(session).Should(gbytes.Say("Masteries1   Exalted Lore"))
 		})
 	})
 })

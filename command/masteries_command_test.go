@@ -1,6 +1,7 @@
 package command_test
 
 import (
+	"github.com/ablease/zinn/api"
 	"github.com/ablease/zinn/command"
 	"github.com/ablease/zinn/command/commandfakes"
 	"github.com/ablease/zinn/ui"
@@ -43,7 +44,7 @@ var _ = Describe("Masteries Command", func() {
 	Describe("fetching masteries", func() {
 		Context("when the command is successful", func() {
 			BeforeEach(func() {
-				fakeClient.MasteriesReturns([]string{"a mastery", "another mastery"}, nil)
+				fakeClient.MasteriesReturns([]api.Mastery{{Name: "mastery1"}, {Name: "mastery2"}}, nil)
 			})
 
 			It("calls the client", func() {
@@ -55,7 +56,8 @@ var _ = Describe("Masteries Command", func() {
 				err = cmd.Execute(nil)
 				Expect(err).ToNot(HaveOccurred())
 				Expect(fakeClient.MasteriesCallCount()).To(Equal(1))
-				Expect(testUI.Out).To(gbytes.Say("a mastery another mastery"))
+				Expect(testUI.Out).To(gbytes.Say("mastery1"))
+				Expect(testUI.Out).To(gbytes.Say("mastery2"))
 			})
 		})
 	})

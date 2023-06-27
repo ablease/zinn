@@ -14,7 +14,7 @@ var err error
 
 var _ = BeforeSuite(func() {
 	var err error
-	pathToZinnCLI, err = gexec.Build("github.com/ablease/zinn/cmd/zinn")
+	pathToZinnCLI, err = gexec.Build("github.com/ablease/zinn")
 	Ω(err).ShouldNot(HaveOccurred())
 })
 

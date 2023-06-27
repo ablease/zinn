@@ -1,14 +1,14 @@
 package command
 
 import (
-	"strings"
-
 	"github.com/ablease/zinn/api"
+	"strconv"
 )
 
 //go:generate counterfeiter . MasteriesClient
 type MasteriesClient interface {
-	Masteries() ([]string, error)
+	Masteries(ids []int) ([]api.Mastery, error)
+	GetMasteryIDs() ([]int, error)
 }
 
 type MasteriesCommand struct {
@@ -23,12 +23,40 @@ func (m *MasteriesCommand) Setup(ui UI) error {
 }
 
 func (m *MasteriesCommand) Execute(args []string) error {
-	masts, err := m.Client.Masteries()
+	ids, err := m.Client.GetMasteryIDs()
 	if err != nil {
 		return err
 	}
 
-	data := strings.Join(masts, " ")
-	m.UI.DisplayText(data)
+	masts, err := m.Client.Masteries(ids)
+	if err != nil {
+		return err
+	}
+
+	headerRow := []string{"ID", "Name"}
+	// must build 2d array of strings and pass to UI
+	// for the number of masterys, create that many rows for the number of mastery fields create that many cols
+	// numRows := len(masts)
+	// numCols := reflect.ValueOf(api.Mastery{}).NumField()
+	table := [][]string{}
+	table = append(table, headerRow)
+
+	// we have the table, lets set the column headers (first row is field names)
+	// get the field names for the struct
+	//fields := reflect.VisibleFields(reflect.TypeOf(struct{ api.Mastery }{}))
+	//headers := []string{}
+	//for _, field := range fields {
+	//	headers = append(headers, field.Name)
+	//}
+	//table = append(table, headers)
+	// [[Mastery ID Name Requirement Order Background Region Levels] [      ]]
+
+	for _, mastery := range masts {
+		row := []string{}
+		row = append(row, strconv.FormatInt(int64(mastery.ID), 10), mastery.Name)
+		table = append(table, row)
+	}
+
+	m.UI.DisplayNonWrappingTable("Masteries", table, 2)
 	return nil
 }
