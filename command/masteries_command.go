@@ -2,7 +2,6 @@ package command
 
 import (
 	"github.com/ablease/zinn/api"
-	"strconv"
 )
 
 //go:generate counterfeiter . MasteriesClient
@@ -33,8 +32,7 @@ func (m *MasteriesCommand) Execute(args []string) error {
 		return err
 	}
 
-	headerRow := []string{"ID", "Name"}
-	// must build 2d array of strings and pass to UI
+	headerRow := []string{"ID", "Name", "Requirement", "Order", "Region"}
 	// for the number of masterys, create that many rows for the number of mastery fields create that many cols
 	// numRows := len(masts)
 	// numCols := reflect.ValueOf(api.Mastery{}).NumField()
@@ -53,10 +51,17 @@ func (m *MasteriesCommand) Execute(args []string) error {
 
 	for _, mastery := range masts {
 		row := []string{}
-		row = append(row, strconv.FormatInt(int64(mastery.ID), 10), mastery.Name)
+		row = append(
+			row,
+			intToString(mastery.ID),
+			mastery.Name,
+			mastery.Requirement,
+			intToString(mastery.Order),
+			mastery.Region,
+		)
 		table = append(table, row)
 	}
 
-	m.UI.DisplayNonWrappingTable("Masteries", table, 2)
+	m.UI.DisplayNonWrappingTable("", table, 2)
 	return nil
 }
