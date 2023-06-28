@@ -11,8 +11,9 @@ type MasteriesClient interface {
 }
 
 type MasteriesCommand struct {
-	UI     UI
-	Client MasteriesClient
+	UI         UI
+	Client     MasteriesClient
+	MasteryIDs []int `long:"id" description:"Get a specific Mastery by ID"`
 }
 
 func (m *MasteriesCommand) Setup(ui UI) error {
@@ -22,9 +23,15 @@ func (m *MasteriesCommand) Setup(ui UI) error {
 }
 
 func (m *MasteriesCommand) Execute(args []string) error {
-	ids, err := m.Client.GetMasteryIDs()
-	if err != nil {
-		return err
+	var ids []int
+	var err error
+	if len(m.MasteryIDs) == 0 {
+		ids, err = m.Client.GetMasteryIDs()
+		if err != nil {
+			return err
+		}
+	} else {
+		ids = m.MasteryIDs
 	}
 
 	masts, err := m.Client.Masteries(ids)
@@ -32,22 +39,9 @@ func (m *MasteriesCommand) Execute(args []string) error {
 		return err
 	}
 
-	headerRow := []string{"ID", "Name", "Requirement", "Order", "Region"}
-	// for the number of masterys, create that many rows for the number of mastery fields create that many cols
-	// numRows := len(masts)
-	// numCols := reflect.ValueOf(api.Mastery{}).NumField()
 	table := [][]string{}
+	headerRow := []string{"ID", "Name", "Requirement", "Order", "Region"}
 	table = append(table, headerRow)
-
-	// we have the table, lets set the column headers (first row is field names)
-	// get the field names for the struct
-	//fields := reflect.VisibleFields(reflect.TypeOf(struct{ api.Mastery }{}))
-	//headers := []string{}
-	//for _, field := range fields {
-	//	headers = append(headers, field.Name)
-	//}
-	//table = append(table, headers)
-	// [[Mastery ID Name Requirement Order Background Region Levels] [      ]]
 
 	for _, mastery := range masts {
 		row := []string{}
@@ -63,5 +57,19 @@ func (m *MasteriesCommand) Execute(args []string) error {
 	}
 
 	m.UI.DisplayNonWrappingTable("", table, 2)
+
+	m.UI.DisplayText("\nFor more information about specific masteries see 'zinn mastery'")
 	return nil
+}
+
+func (m *MasteriesCommand) Usage() string {
+	return "--id=ID\n\n ID is a mastery ID.\n If ID is omitted all masteries are returned."
+}
+
+func (m *MasteriesCommand) Examples() string {
+	return `
+zinn masteries			     # returns all masteries
+zinn masteries --id=1	     # returns the Exalted Lore mastery
+zinn masteries --id=1 --id=2 # returns the Exhalted Lore and Itzel Lore Mastery
+`
 }

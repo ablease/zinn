@@ -16,7 +16,7 @@ func main() {
 	parser.CommandHandler = handleCommand
 	_, err := parser.ParseArgs(os.Args[1:])
 
-	if len(os.Args[1:]) < 1 {
+	if len(os.Args[1:]) < 1 || os.Args[1] == "help" {
 		parser.WriteHelp(os.Stdout)
 	}
 
