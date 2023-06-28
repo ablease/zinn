@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-ginkgo -skip-package=integration -cover -r
