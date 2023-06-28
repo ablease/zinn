@@ -1,6 +1,7 @@
 package command_test
 
 import (
+	"github.com/ablease/zinn/api"
 	"github.com/ablease/zinn/command"
 	"github.com/ablease/zinn/command/commandfakes"
 	"github.com/ablease/zinn/ui"
@@ -56,6 +57,21 @@ var _ = Describe("Achievements Command", func() {
 				Expect(err).ToNot(HaveOccurred())
 				Expect(fakeClient.AchievementIDsCallCount()).To(Equal(1))
 				Expect(testUI.Out).To(gbytes.Say("1 2"))
+			})
+		})
+
+		Context("when one ID is provided", func() {
+			BeforeEach(func() {
+				fakeClient.AchievementsReturns([]api.Achievement{{Name: "achievement1"}}, nil)
+			})
+
+			It("returns the request Achievement", func() {
+				cmd.AchievementIDs = []int{1}
+				_ = cmd.Execute(nil)
+				Expect(fakeClient.AchievementIDsCallCount()).To(Equal(0))
+				Expect(fakeClient.AchievementsCallCount()).To(Equal(1))
+				Expect(fakeClient.AchievementsArgsForCall(0)).To(Equal([]int{1}))
+				Expect(testUI.Out).To(gbytes.Say("achievement1"))
 			})
 		})
 	})

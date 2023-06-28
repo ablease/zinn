@@ -4,6 +4,7 @@ package commandfakes
 import (
 	"sync"
 
+	"github.com/ablease/zinn/api"
 	"github.com/ablease/zinn/command"
 )
 
@@ -18,6 +19,19 @@ type FakeAchievementsClient struct {
 	}
 	achievementIDsReturnsOnCall map[int]struct {
 		result1 []int
+		result2 error
+	}
+	AchievementsStub        func([]int) ([]api.Achievement, error)
+	achievementsMutex       sync.RWMutex
+	achievementsArgsForCall []struct {
+		arg1 []int
+	}
+	achievementsReturns struct {
+		result1 []api.Achievement
+		result2 error
+	}
+	achievementsReturnsOnCall map[int]struct {
+		result1 []api.Achievement
 		result2 error
 	}
 	invocations      map[string][][]interface{}
@@ -80,11 +94,82 @@ func (fake *FakeAchievementsClient) AchievementIDsReturnsOnCall(i int, result1 [
 	}{result1, result2}
 }
 
+func (fake *FakeAchievementsClient) Achievements(arg1 []int) ([]api.Achievement, error) {
+	var arg1Copy []int
+	if arg1 != nil {
+		arg1Copy = make([]int, len(arg1))
+		copy(arg1Copy, arg1)
+	}
+	fake.achievementsMutex.Lock()
+	ret, specificReturn := fake.achievementsReturnsOnCall[len(fake.achievementsArgsForCall)]
+	fake.achievementsArgsForCall = append(fake.achievementsArgsForCall, struct {
+		arg1 []int
+	}{arg1Copy})
+	stub := fake.AchievementsStub
+	fakeReturns := fake.achievementsReturns
+	fake.recordInvocation("Achievements", []interface{}{arg1Copy})
+	fake.achievementsMutex.Unlock()
+	if stub != nil {
+		return stub(arg1)
+	}
+	if specificReturn {
+		return ret.result1, ret.result2
+	}
+	return fakeReturns.result1, fakeReturns.result2
+}
+
+func (fake *FakeAchievementsClient) AchievementsCallCount() int {
+	fake.achievementsMutex.RLock()
+	defer fake.achievementsMutex.RUnlock()
+	return len(fake.achievementsArgsForCall)
+}
+
+func (fake *FakeAchievementsClient) AchievementsCalls(stub func([]int) ([]api.Achievement, error)) {
+	fake.achievementsMutex.Lock()
+	defer fake.achievementsMutex.Unlock()
+	fake.AchievementsStub = stub
+}
+
+func (fake *FakeAchievementsClient) AchievementsArgsForCall(i int) []int {
+	fake.achievementsMutex.RLock()
+	defer fake.achievementsMutex.RUnlock()
+	argsForCall := fake.achievementsArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeAchievementsClient) AchievementsReturns(result1 []api.Achievement, result2 error) {
+	fake.achievementsMutex.Lock()
+	defer fake.achievementsMutex.Unlock()
+	fake.AchievementsStub = nil
+	fake.achievementsReturns = struct {
+		result1 []api.Achievement
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeAchievementsClient) AchievementsReturnsOnCall(i int, result1 []api.Achievement, result2 error) {
+	fake.achievementsMutex.Lock()
+	defer fake.achievementsMutex.Unlock()
+	fake.AchievementsStub = nil
+	if fake.achievementsReturnsOnCall == nil {
+		fake.achievementsReturnsOnCall = make(map[int]struct {
+			result1 []api.Achievement
+			result2 error
+		})
+	}
+	fake.achievementsReturnsOnCall[i] = struct {
+		result1 []api.Achievement
+		result2 error
+	}{result1, result2}
+}
+
 func (fake *FakeAchievementsClient) Invocations() map[string][][]interface{} {
 	fake.invocationsMutex.RLock()
 	defer fake.invocationsMutex.RUnlock()
 	fake.achievementIDsMutex.RLock()
 	defer fake.achievementIDsMutex.RUnlock()
+	fake.achievementsMutex.RLock()
+	defer fake.achievementsMutex.RUnlock()
 	copiedInvocations := map[string][][]interface{}{}
 	for key, value := range fake.invocations {
 		copiedInvocations[key] = value

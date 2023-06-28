@@ -10,11 +10,13 @@ import (
 //go:generate counterfeiter . AchievementsClient
 type AchievementsClient interface {
 	AchievementIDs() ([]int, error)
+	Achievements(ids []int) ([]api.Achievement, error)
 }
 
 type AchievementsCommand struct {
-	UI     UI
-	Client AchievementsClient
+	UI             UI
+	Client         AchievementsClient
+	AchievementIDs []int `long:"id" description:"Get a specific Achievement by ID"`
 }
 
 // Setup sets the UI object, and the URL for the api Client
@@ -25,19 +27,45 @@ func (a *AchievementsCommand) Setup(ui UI) error {
 }
 
 func (a *AchievementsCommand) Execute(args []string) error {
-	achieves, err := a.Client.AchievementIDs()
-	if err != nil {
-		return err
-	}
+	if len(a.AchievementIDs) == 0 {
+		achieves, err := a.Client.AchievementIDs()
+		if err != nil {
+			return err
+		}
 
-	stringData := []string{}
-	for i := range achieves {
-		number := achieves[i]
-		text := strconv.Itoa(number)
-		stringData = append(stringData, text)
-	}
+		stringData := []string{}
+		for i := range achieves {
+			number := achieves[i]
+			text := strconv.Itoa(number)
+			stringData = append(stringData, text)
+		}
 
-	data := strings.Join(stringData, " ")
-	a.UI.DisplayText(data)
+		data := strings.Join(stringData, " ")
+		a.UI.DisplayText(data)
+		return nil
+	} else {
+		achieves, err := a.Client.Achievements(a.AchievementIDs)
+		if err != nil {
+			return err
+		}
+		table := [][]string{}
+		headerRow := []string{"ID", "Name", "Description", "Requirement", "LockedText", "Type"}
+		table = append(table, headerRow)
+
+		for _, achievement := range achieves {
+			row := []string{}
+			row = append(row,
+				intToString(achievement.ID),
+				achievement.Name,
+				achievement.Description,
+				achievement.Requirement,
+				achievement.LockedText,
+				achievement.Type,
+			)
+			table = append(table, row)
+		}
+		a.UI.DisplayNonWrappingTable("", table, 2)
+	}
+	a.UI.DisplayText("\nFor more information about specific achievements see 'zinn mastery'")
 	return nil
 }
