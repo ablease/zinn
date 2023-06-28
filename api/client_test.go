@@ -167,5 +167,59 @@ var _ = Describe("Client", func() {
 				})
 			})
 		})
+
+		Context("when requesting 1 or many achievements", func() {
+			var (
+				statusCode int
+			)
+
+			returnedAchievements := []Achievement{
+				{
+					ID:   1,
+					Name: "something",
+				},
+			}
+
+			BeforeEach(func() {
+				statusCode = http.StatusOK
+				server.AppendHandlers(
+					ghttp.CombineHandlers(
+						ghttp.VerifyRequest("GET", "/"),
+						ghttp.RespondWithJSONEncodedPtr(&statusCode, returnedAchievements),
+					),
+				)
+			})
+
+			It("should return the list of returnedAchievements id's", func() {
+				achieveIDs := []int{1}
+
+				response, err := client.Achievements(achieveIDs)
+				Expect(err).NotTo(HaveOccurred())
+				Expect(response).To(Equal(returnedAchievements))
+			})
+		})
+	})
+
+	Describe("DailyCrafting", func() {
+		Context("when requesting all daily crafts", func() {
+			var statusCode int
+			var dailyCrafts []string
+
+			BeforeEach(func() {
+				statusCode = http.StatusOK
+				dailyCrafts = []string{}
+				server.AppendHandlers(ghttp.CombineHandlers(
+					ghttp.VerifyRequest("GET", "/v2/dailycrafting"),
+					ghttp.RespondWithJSONEncodedPtr(&statusCode, &dailyCrafts),
+				))
+			})
+
+			It("should return the daily crafts", func() {
+				dailyCrafts = []string{"craft1", "craft2"}
+				resp, err := client.DailyCrafting()
+				Expect(err).NotTo(HaveOccurred())
+				Expect(resp).To(Equal(dailyCrafts))
+			})
+		})
 	})
 })

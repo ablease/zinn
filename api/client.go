@@ -53,3 +53,19 @@ func (c *Client) Professions() ([]string, error) {
 
 	return profs, nil
 }
+
+func (c *Client) DailyCrafting() ([]string, error) {
+	fullURL := c.URL + "/v2/dailycrafting"
+	body, err := get(fullURL)
+	if err != nil {
+		return nil, err
+	}
+
+	var dailyCrafts []string
+	err = json.Unmarshal(body, &dailyCrafts)
+	if err != nil {
+		return nil, err
+	}
+
+	return dailyCrafts, nil
+}

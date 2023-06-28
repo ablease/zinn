@@ -34,6 +34,18 @@ type FakeApiClient struct {
 		result1 []api.Achievement
 		result2 error
 	}
+	DailyCraftingStub        func() ([]string, error)
+	dailyCraftingMutex       sync.RWMutex
+	dailyCraftingArgsForCall []struct {
+	}
+	dailyCraftingReturns struct {
+		result1 []string
+		result2 error
+	}
+	dailyCraftingReturnsOnCall map[int]struct {
+		result1 []string
+		result2 error
+	}
 	GetMasteryIDsStub        func() ([]int, error)
 	getMasteryIDsMutex       sync.RWMutex
 	getMasteryIDsArgsForCall []struct {
@@ -196,6 +208,62 @@ func (fake *FakeApiClient) AchievementsReturnsOnCall(i int, result1 []api.Achiev
 	}
 	fake.achievementsReturnsOnCall[i] = struct {
 		result1 []api.Achievement
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeApiClient) DailyCrafting() ([]string, error) {
+	fake.dailyCraftingMutex.Lock()
+	ret, specificReturn := fake.dailyCraftingReturnsOnCall[len(fake.dailyCraftingArgsForCall)]
+	fake.dailyCraftingArgsForCall = append(fake.dailyCraftingArgsForCall, struct {
+	}{})
+	stub := fake.DailyCraftingStub
+	fakeReturns := fake.dailyCraftingReturns
+	fake.recordInvocation("DailyCrafting", []interface{}{})
+	fake.dailyCraftingMutex.Unlock()
+	if stub != nil {
+		return stub()
+	}
+	if specificReturn {
+		return ret.result1, ret.result2
+	}
+	return fakeReturns.result1, fakeReturns.result2
+}
+
+func (fake *FakeApiClient) DailyCraftingCallCount() int {
+	fake.dailyCraftingMutex.RLock()
+	defer fake.dailyCraftingMutex.RUnlock()
+	return len(fake.dailyCraftingArgsForCall)
+}
+
+func (fake *FakeApiClient) DailyCraftingCalls(stub func() ([]string, error)) {
+	fake.dailyCraftingMutex.Lock()
+	defer fake.dailyCraftingMutex.Unlock()
+	fake.DailyCraftingStub = stub
+}
+
+func (fake *FakeApiClient) DailyCraftingReturns(result1 []string, result2 error) {
+	fake.dailyCraftingMutex.Lock()
+	defer fake.dailyCraftingMutex.Unlock()
+	fake.DailyCraftingStub = nil
+	fake.dailyCraftingReturns = struct {
+		result1 []string
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeApiClient) DailyCraftingReturnsOnCall(i int, result1 []string, result2 error) {
+	fake.dailyCraftingMutex.Lock()
+	defer fake.dailyCraftingMutex.Unlock()
+	fake.DailyCraftingStub = nil
+	if fake.dailyCraftingReturnsOnCall == nil {
+		fake.dailyCraftingReturnsOnCall = make(map[int]struct {
+			result1 []string
+			result2 error
+		})
+	}
+	fake.dailyCraftingReturnsOnCall[i] = struct {
+		result1 []string
 		result2 error
 	}{result1, result2}
 }
@@ -388,6 +456,8 @@ func (fake *FakeApiClient) Invocations() map[string][][]interface{} {
 	defer fake.achievementIDsMutex.RUnlock()
 	fake.achievementsMutex.RLock()
 	defer fake.achievementsMutex.RUnlock()
+	fake.dailyCraftingMutex.RLock()
+	defer fake.dailyCraftingMutex.RUnlock()
 	fake.getMasteryIDsMutex.RLock()
 	defer fake.getMasteryIDsMutex.RUnlock()
 	fake.masteriesMutex.RLock()

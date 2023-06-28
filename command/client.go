@@ -11,4 +11,5 @@ type ApiClient interface {
 	Masteries(ids []int) ([]api.Mastery, error)
 	AchievementIDs() ([]int, error)
 	Achievements(ids []int) ([]api.Achievement, error)
+	DailyCrafting() ([]string, error)
 }
