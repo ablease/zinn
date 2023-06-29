@@ -22,8 +22,10 @@ var _ = Describe("Daily Reward Commands", func() {
 			fakeClient = new(commandfakes.FakeApiClient)
 			testUI = ui.NewTestUI(nil, gbytes.NewBuffer(), gbytes.NewBuffer())
 			cmd = command.DailyCraftingCommand{
-				UI:     testUI,
-				Client: fakeClient,
+				BaseCommand: command.BaseCommand{
+					UI:     testUI,
+					Client: fakeClient,
+				},
 			}
 		})
 
@@ -75,8 +77,10 @@ var _ = Describe("Daily Reward Commands", func() {
 			fakeClient = new(commandfakes.FakeApiClient)
 			testUI = ui.NewTestUI(nil, gbytes.NewBuffer(), gbytes.NewBuffer())
 			cmd = command.MapChestsCommand{
-				UI:     testUI,
-				Client: fakeClient,
+				BaseCommand: command.BaseCommand{
+					UI:     testUI,
+					Client: fakeClient,
+				},
 			}
 		})
 
