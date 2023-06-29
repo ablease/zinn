@@ -12,4 +12,5 @@ type ApiClient interface {
 	AchievementIDs() ([]int, error)
 	Achievements(ids []int) ([]api.Achievement, error)
 	DailyCrafting() ([]string, error)
+	MapChests() ([]string, error)
 }

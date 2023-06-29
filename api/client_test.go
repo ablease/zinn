@@ -222,4 +222,27 @@ var _ = Describe("Client", func() {
 			})
 		})
 	})
+
+	Describe("MapChests", func() {
+		Context("when requesting map chests", func() {
+			var statusCode int
+			var mapchests []string
+
+			BeforeEach(func() {
+				statusCode = http.StatusOK
+				mapchests = []string{}
+				server.AppendHandlers(ghttp.CombineHandlers(
+					ghttp.VerifyRequest("GET", "/v2/mapchests"),
+					ghttp.RespondWithJSONEncodedPtr(&statusCode, &mapchests),
+				))
+			})
+
+			It("should return the map chests", func() {
+				mapchests = []string{"chest1", "chest2"}
+				resp, err := client.MapChests()
+				Expect(err).NotTo(HaveOccurred())
+				Expect(resp).To(Equal(mapchests))
+			})
+		})
+	})
 })

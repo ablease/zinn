@@ -75,3 +75,7 @@ func (c *Client) Professions() ([]string, error) {
 func (c *Client) DailyCrafting() ([]string, error) {
 	return getList(c.URL + "/v2/dailycrafting")
 }
+
+func (c *Client) MapChests() ([]string, error) {
+	return getList(c.URL + "/v2/mapchests")
+}

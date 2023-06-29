@@ -58,6 +58,18 @@ type FakeApiClient struct {
 		result1 []int
 		result2 error
 	}
+	MapChestsStub        func() ([]string, error)
+	mapChestsMutex       sync.RWMutex
+	mapChestsArgsForCall []struct {
+	}
+	mapChestsReturns struct {
+		result1 []string
+		result2 error
+	}
+	mapChestsReturnsOnCall map[int]struct {
+		result1 []string
+		result2 error
+	}
 	MasteriesStub        func([]int) ([]api.Mastery, error)
 	masteriesMutex       sync.RWMutex
 	masteriesArgsForCall []struct {
@@ -324,6 +336,62 @@ func (fake *FakeApiClient) GetMasteryIDsReturnsOnCall(i int, result1 []int, resu
 	}{result1, result2}
 }
 
+func (fake *FakeApiClient) MapChests() ([]string, error) {
+	fake.mapChestsMutex.Lock()
+	ret, specificReturn := fake.mapChestsReturnsOnCall[len(fake.mapChestsArgsForCall)]
+	fake.mapChestsArgsForCall = append(fake.mapChestsArgsForCall, struct {
+	}{})
+	stub := fake.MapChestsStub
+	fakeReturns := fake.mapChestsReturns
+	fake.recordInvocation("MapChests", []interface{}{})
+	fake.mapChestsMutex.Unlock()
+	if stub != nil {
+		return stub()
+	}
+	if specificReturn {
+		return ret.result1, ret.result2
+	}
+	return fakeReturns.result1, fakeReturns.result2
+}
+
+func (fake *FakeApiClient) MapChestsCallCount() int {
+	fake.mapChestsMutex.RLock()
+	defer fake.mapChestsMutex.RUnlock()
+	return len(fake.mapChestsArgsForCall)
+}
+
+func (fake *FakeApiClient) MapChestsCalls(stub func() ([]string, error)) {
+	fake.mapChestsMutex.Lock()
+	defer fake.mapChestsMutex.Unlock()
+	fake.MapChestsStub = stub
+}
+
+func (fake *FakeApiClient) MapChestsReturns(result1 []string, result2 error) {
+	fake.mapChestsMutex.Lock()
+	defer fake.mapChestsMutex.Unlock()
+	fake.MapChestsStub = nil
+	fake.mapChestsReturns = struct {
+		result1 []string
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeApiClient) MapChestsReturnsOnCall(i int, result1 []string, result2 error) {
+	fake.mapChestsMutex.Lock()
+	defer fake.mapChestsMutex.Unlock()
+	fake.MapChestsStub = nil
+	if fake.mapChestsReturnsOnCall == nil {
+		fake.mapChestsReturnsOnCall = make(map[int]struct {
+			result1 []string
+			result2 error
+		})
+	}
+	fake.mapChestsReturnsOnCall[i] = struct {
+		result1 []string
+		result2 error
+	}{result1, result2}
+}
+
 func (fake *FakeApiClient) Masteries(arg1 []int) ([]api.Mastery, error) {
 	var arg1Copy []int
 	if arg1 != nil {
@@ -460,6 +528,8 @@ func (fake *FakeApiClient) Invocations() map[string][][]interface{} {
 	defer fake.dailyCraftingMutex.RUnlock()
 	fake.getMasteryIDsMutex.RLock()
 	defer fake.getMasteryIDsMutex.RUnlock()
+	fake.mapChestsMutex.RLock()
+	defer fake.mapChestsMutex.RUnlock()
 	fake.masteriesMutex.RLock()
 	defer fake.masteriesMutex.RUnlock()
 	fake.professionsMutex.RLock()

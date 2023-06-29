@@ -30,3 +30,30 @@ func (d *DailyCraftingCommand) Execute(args []string) error {
 	}
 	return nil
 }
+
+//go:generate counterfeiter . MapChestsClient
+type MapChestsClient interface {
+	MapChests() ([]string, error)
+}
+
+type MapChestsCommand struct {
+	UI     UI
+	Client MapChestsClient
+}
+
+func (m *MapChestsCommand) Setup(ui UI) error {
+	m.UI = ui
+	m.Client = api.NewClient("https://api.guildwars2.com")
+	return nil
+}
+func (m *MapChestsCommand) Execute(args []string) error {
+	mapChests, err := m.Client.MapChests()
+	if err != nil {
+		return err
+	}
+
+	for _, result := range mapChests {
+		m.UI.DisplayText(result)
+	}
+	return nil
+}
