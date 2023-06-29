@@ -31,3 +31,19 @@ func (m *MapChestsCommand) Execute(args []string) error {
 	}
 	return nil
 }
+
+type WorldBossesCommand struct {
+	BaseCommand
+}
+
+func (w *WorldBossesCommand) Execute(args []string) error {
+	bosses, err := w.Client.WorldBosses()
+	if err != nil {
+		return err
+	}
+
+	for _, result := range bosses {
+		w.UI.DisplayText(result)
+	}
+	return nil
+}

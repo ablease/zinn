@@ -245,4 +245,27 @@ var _ = Describe("Client", func() {
 			})
 		})
 	})
+
+	Describe("WorldBosses", func() {
+		Context("when requesting world bosses", func() {
+			var statusCode int
+			var bosses []string
+
+			BeforeEach(func() {
+				statusCode = http.StatusOK
+				bosses = []string{}
+				server.AppendHandlers(ghttp.CombineHandlers(
+					ghttp.VerifyRequest("GET", "/v2/worldbosses"),
+					ghttp.RespondWithJSONEncodedPtr(&statusCode, &bosses),
+				))
+			})
+
+			It("should return the world bossses", func() {
+				bosses = []string{"chest1", "chest2"}
+				resp, err := client.WorldBosses()
+				Expect(err).NotTo(HaveOccurred())
+				Expect(resp).To(Equal(bosses))
+			})
+		})
+	})
 })

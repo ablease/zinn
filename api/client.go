@@ -79,3 +79,7 @@ func (c *Client) DailyCrafting() ([]string, error) {
 func (c *Client) MapChests() ([]string, error) {
 	return getList(c.URL + "/v2/mapchests")
 }
+
+func (c *Client) WorldBosses() ([]string, error) {
+	return getList(c.URL + "/v2/worldbosses")
+}

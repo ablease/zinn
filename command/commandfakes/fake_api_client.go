@@ -95,6 +95,18 @@ type FakeApiClient struct {
 		result1 []string
 		result2 error
 	}
+	WorldBossesStub        func() ([]string, error)
+	worldBossesMutex       sync.RWMutex
+	worldBossesArgsForCall []struct {
+	}
+	worldBossesReturns struct {
+		result1 []string
+		result2 error
+	}
+	worldBossesReturnsOnCall map[int]struct {
+		result1 []string
+		result2 error
+	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
 }
@@ -517,6 +529,62 @@ func (fake *FakeApiClient) ProfessionsReturnsOnCall(i int, result1 []string, res
 	}{result1, result2}
 }
 
+func (fake *FakeApiClient) WorldBosses() ([]string, error) {
+	fake.worldBossesMutex.Lock()
+	ret, specificReturn := fake.worldBossesReturnsOnCall[len(fake.worldBossesArgsForCall)]
+	fake.worldBossesArgsForCall = append(fake.worldBossesArgsForCall, struct {
+	}{})
+	stub := fake.WorldBossesStub
+	fakeReturns := fake.worldBossesReturns
+	fake.recordInvocation("WorldBosses", []interface{}{})
+	fake.worldBossesMutex.Unlock()
+	if stub != nil {
+		return stub()
+	}
+	if specificReturn {
+		return ret.result1, ret.result2
+	}
+	return fakeReturns.result1, fakeReturns.result2
+}
+
+func (fake *FakeApiClient) WorldBossesCallCount() int {
+	fake.worldBossesMutex.RLock()
+	defer fake.worldBossesMutex.RUnlock()
+	return len(fake.worldBossesArgsForCall)
+}
+
+func (fake *FakeApiClient) WorldBossesCalls(stub func() ([]string, error)) {
+	fake.worldBossesMutex.Lock()
+	defer fake.worldBossesMutex.Unlock()
+	fake.WorldBossesStub = stub
+}
+
+func (fake *FakeApiClient) WorldBossesReturns(result1 []string, result2 error) {
+	fake.worldBossesMutex.Lock()
+	defer fake.worldBossesMutex.Unlock()
+	fake.WorldBossesStub = nil
+	fake.worldBossesReturns = struct {
+		result1 []string
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeApiClient) WorldBossesReturnsOnCall(i int, result1 []string, result2 error) {
+	fake.worldBossesMutex.Lock()
+	defer fake.worldBossesMutex.Unlock()
+	fake.WorldBossesStub = nil
+	if fake.worldBossesReturnsOnCall == nil {
+		fake.worldBossesReturnsOnCall = make(map[int]struct {
+			result1 []string
+			result2 error
+		})
+	}
+	fake.worldBossesReturnsOnCall[i] = struct {
+		result1 []string
+		result2 error
+	}{result1, result2}
+}
+
 func (fake *FakeApiClient) Invocations() map[string][][]interface{} {
 	fake.invocationsMutex.RLock()
 	defer fake.invocationsMutex.RUnlock()
@@ -534,6 +602,8 @@ func (fake *FakeApiClient) Invocations() map[string][][]interface{} {
 	defer fake.masteriesMutex.RUnlock()
 	fake.professionsMutex.RLock()
 	defer fake.professionsMutex.RUnlock()
+	fake.worldBossesMutex.RLock()
+	defer fake.worldBossesMutex.RUnlock()
 	copiedInvocations := map[string][][]interface{}{}
 	for key, value := range fake.invocations {
 		copiedInvocations[key] = value

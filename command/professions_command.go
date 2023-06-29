@@ -2,24 +2,10 @@ package command
 
 import (
 	"strings"
-
-	"github.com/ablease/zinn/api"
 )
 
-//go:generate counterfeiter . ProfessionClient
-type ProfessionClient interface {
-	Professions() ([]string, error)
-}
-
 type ProfessionsCommand struct {
-	UI     UI
-	Client ProfessionClient
-}
-
-func (p *ProfessionsCommand) Setup(ui UI) error {
-	p.UI = ui
-	p.Client = api.NewClient("https://api.guildwars2.com")
-	return nil
+	BaseCommand
 }
 
 func (p *ProfessionsCommand) Execute(args []string) error {

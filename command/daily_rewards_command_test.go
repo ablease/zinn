@@ -119,4 +119,59 @@ var _ = Describe("Daily Reward Commands", func() {
 			})
 		})
 	})
+
+	Describe("WorldBosses Command", func() {
+		var (
+			cmd        command.WorldBossesCommand
+			testUI     *ui.UI
+			err        error
+			fakeClient *commandfakes.FakeApiClient
+		)
+
+		BeforeEach(func() {
+			fakeClient = new(commandfakes.FakeApiClient)
+			testUI = ui.NewTestUI(nil, gbytes.NewBuffer(), gbytes.NewBuffer())
+			cmd = command.WorldBossesCommand{
+				BaseCommand: command.BaseCommand{
+					UI:     testUI,
+					Client: fakeClient,
+				},
+			}
+		})
+
+		Describe("Setup", func() {
+			It("Sets up the UI object", func() {
+				err = cmd.Setup(testUI)
+				Expect(err).ToNot(HaveOccurred())
+				Expect(cmd.UI).To(Equal(testUI))
+			})
+
+			It("Sets the Client object", func() {
+				err = cmd.Setup(testUI)
+				Expect(err).ToNot(HaveOccurred())
+				Expect(cmd.Client).ToNot(Equal(nil))
+			})
+		})
+
+		Describe("fetching world bosses", func() {
+			Context("when the command is successfull", func() {
+				BeforeEach(func() {
+					fakeClient.WorldBossesReturns([]string{"boss1", "boss2"}, nil)
+				})
+
+				It("calls the client", func() {
+					_ = cmd.Execute(nil)
+					Expect(fakeClient.WorldBossesCallCount()).To(Equal(1))
+				})
+
+				It("displays the list of world bosses", func() {
+					err = cmd.Execute(nil)
+					Expect(err).ToNot(HaveOccurred())
+					Expect(fakeClient.WorldBossesCallCount()).To(Equal(1))
+					Expect(testUI.Out).To(gbytes.Say("boss1"))
+					Expect(testUI.Out).To(gbytes.Say("boss2"))
+				})
+			})
+		})
+	})
 })
