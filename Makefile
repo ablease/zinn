@@ -30,6 +30,8 @@ ginkgo: | $(GINKGO)
 build: ## Just compile all
 	$(GO) build -v .
 
+fakes: ## build fakes
+	$(GO) generate ./...
 ### Tests
 
 GINKGO_RUN_SHARED_FLAGS := --randomize-all --race
