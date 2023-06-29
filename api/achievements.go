@@ -26,18 +26,7 @@ type Achievement struct {
 
 // AchievementIDs returns a list of all achievement ids
 func (c *Client) AchievementIDs() ([]int, error) {
-	achievementIDs := []int{}
-	body, err := get(c.URL)
-	if err != nil {
-		return nil, err
-	}
-
-	err = json.Unmarshal(body, &achievementIDs)
-	if err != nil {
-		return nil, err
-	}
-
-	return achievementIDs, nil
+	return getIDs(c.URL)
 }
 
 // Achievements returns achievments for a specific set of ids

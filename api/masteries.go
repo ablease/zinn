@@ -25,18 +25,7 @@ type Level struct {
 }
 
 func (c *Client) GetMasteryIDs() ([]int, error) {
-	fullURL := c.URL + "/v2/masteries"
-	body, err := get(fullURL)
-	if err != nil {
-		return nil, err
-	}
-
-	var masteryIDs []int
-	err = json.Unmarshal(body, &masteryIDs)
-	if err != nil {
-		return nil, err
-	}
-	return masteryIDs, nil
+	return getIDs(c.URL + "/v2/masteries")
 }
 
 func (c *Client) Masteries(ids []int) ([]Mastery, error) {

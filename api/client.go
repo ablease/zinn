@@ -38,34 +38,40 @@ func get(url string) ([]byte, error) {
 	return body, err
 }
 
+func getList(url string) ([]string, error) {
+	body, err := get(url)
+	if err != nil {
+		return nil, err
+	}
+
+	var result []string
+	err = json.Unmarshal(body, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+func getIDs(url string) ([]int, error) {
+	body, err := get(url)
+	if err != nil {
+		return nil, err
+	}
+
+	var result []int
+	err = json.Unmarshal(body, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
 func (c *Client) Professions() ([]string, error) {
-	fullURL := c.URL + "/v2/professions"
-	body, err := get(fullURL)
-	if err != nil {
-		return nil, err
-	}
-
-	var profs []string
-	err = json.Unmarshal(body, &profs)
-	if err != nil {
-		return nil, err
-	}
-
-	return profs, nil
+	return getList(c.URL + "/v2/professions")
 }
 
 func (c *Client) DailyCrafting() ([]string, error) {
-	fullURL := c.URL + "/v2/dailycrafting"
-	body, err := get(fullURL)
-	if err != nil {
-		return nil, err
-	}
-
-	var dailyCrafts []string
-	err = json.Unmarshal(body, &dailyCrafts)
-	if err != nil {
-		return nil, err
-	}
-
-	return dailyCrafts, nil
+	return getList(c.URL + "/v2/dailycrafting")
 }
