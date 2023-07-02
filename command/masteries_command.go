@@ -13,7 +13,7 @@ type MasteriesClient interface {
 type MasteriesCommand struct {
 	UI         UI
 	Client     MasteriesClient
-	MasteryIDs []int `long:"id" description:"Get a specific Mastery by ID"`
+	MasteryIDs []int `short:"i" long:"id" description:"Get a specific Mastery by ID"`
 }
 
 func (m *MasteriesCommand) Setup(ui UI) error {
@@ -69,7 +69,7 @@ func (m *MasteriesCommand) Usage() string {
 func (m *MasteriesCommand) Examples() string {
 	return `
 zinn masteries			     # returns all masteries
-zinn masteries --id=1	     # returns the Exalted Lore mastery
+zinn masteries -i=1	     # returns the Exalted Lore mastery
 zinn masteries --id=1 --id=2 # returns the Exhalted Lore and Itzel Lore Mastery
 `
 }

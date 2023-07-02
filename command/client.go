@@ -1,6 +1,8 @@
 package command
 
-import "github.com/ablease/zinn/api"
+import (
+	"github.com/ablease/zinn/api"
+)
 
 // Client ...
 //
@@ -11,7 +13,7 @@ type ApiClient interface {
 	Masteries(ids []int) ([]api.Mastery, error)
 	AchievementIDs() ([]int, error)
 	Achievements(ids []int) ([]api.Achievement, error)
-	DailyCrafting() ([]string, error)
+	DailyCrafting() ([]byte, error)
 	MapChests() ([]string, error)
 	WorldBosses() ([]string, error)
 }

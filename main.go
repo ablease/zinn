@@ -14,11 +14,15 @@ func main() {
 	var commands command.Commands
 	parser := flags.NewParser(&commands, flags.HelpFlag)
 	parser.CommandHandler = handleCommand
-	_, err := parser.ParseArgs(os.Args[1:])
+
+	parsedArgs, err := parser.ParseArgs(os.Args[1:])
+	fmt.Println(parsedArgs)
 
 	if len(os.Args[1:]) < 1 || os.Args[1] == "help" {
 		parser.WriteHelp(os.Stdout)
 	}
+
+	fmt.Printf("main.go Setting JsonResponse to: %b\n", opts.JsonResponse)
 
 	if err != nil {
 		fmt.Print(err)
@@ -30,7 +34,7 @@ func handleCommand(cmd flags.Commander, args []string) error {
 	commandUI := ui.NewUI()
 
 	if extendedCmd, ok := cmd.(command.ExtendedCommander); ok {
-		err := extendedCmd.Setup(commandUI)
+		err := extendedCmd.Setup(commandUI, JsonResponse)
 		if err != nil {
 			return handleError(err, commandUI)
 		}

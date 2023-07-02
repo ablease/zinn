@@ -1,16 +1,19 @@
 package command
 
 import (
+	"fmt"
 	"github.com/ablease/zinn/api"
 	flags "github.com/jessevdk/go-flags"
 )
 
 type ExtendedCommander interface {
 	flags.Commander
-	Setup(UI) error
+	Setup(ui UI, json bool) error
 }
 
 type Commands struct {
+	JsonResponse []bool `short:"j" long:"json" description:"Print the raw JSON response from GW2 api"`
+
 	Professions   ProfessionsCommand   `command:"professions" description:"List Professions"`
 	Masteries     MasteriesCommand     `command:"masteries" description:"List Masteries"`
 	Achievements  AchievementsCommand  `command:"achievements" description:"List Achievements"`
@@ -24,8 +27,10 @@ type BaseCommand struct {
 	Client ApiClient
 }
 
-func (b *BaseCommand) Setup(ui UI) error {
+func (b *BaseCommand) Setup(ui UI, jsonResponse bool) error {
 	b.UI = ui
+	b.JsonResponse = jsonResponse
 	b.Client = api.NewClient("https://api.guildwars2.com")
+	fmt.Printf("Setup, setting JsonResponse to: %b\n", jsonResponse)
 	return nil
 }

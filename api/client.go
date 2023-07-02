@@ -7,7 +7,8 @@ import (
 )
 
 type Client struct {
-	URL string
+	URL          string
+	JsonResponse bool
 }
 
 func NewClient(url string) *Client {
@@ -72,8 +73,8 @@ func (c *Client) Professions() ([]string, error) {
 	return getList(c.URL + "/v2/professions")
 }
 
-func (c *Client) DailyCrafting() ([]string, error) {
-	return getList(c.URL + "/v2/dailycrafting")
+func (c *Client) DailyCrafting() ([]byte, error) {
+	return get(c.URL + "/v2/dailycrafting")
 }
 
 func (c *Client) MapChests() ([]string, error) {

@@ -1,16 +1,38 @@
 package command
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
 type DailyCraftingCommand struct {
 	BaseCommand
 }
 
 func (d *DailyCraftingCommand) Execute(args []string) error {
+	// make the call
 	dailyCrafts, err := d.Client.DailyCrafting()
 	if err != nil {
 		return err
 	}
 
-	for _, result := range dailyCrafts {
+	fmt.Printf("DailyCraftingCommand.JsonResponse: %b", d.JsonResponse)
+	// decode the response
+	if d.JsonResponse {
+		// print the json
+		fmt.Println("***** No unmarshaling")
+		d.UI.DisplayText(string(dailyCrafts))
+		return nil
+	}
+
+	var results []string
+	err = json.Unmarshal(dailyCrafts, &results)
+	if err != nil {
+		return err
+	}
+
+	// print to the screen
+	for _, result := range results {
 		d.UI.DisplayText(result)
 	}
 	return nil
